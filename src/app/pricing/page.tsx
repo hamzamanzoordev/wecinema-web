@@ -108,7 +108,6 @@ export default function PricingPage() {
           isPartOf: { "@type": "WebSite", name: "WeCinema", url: `${SITE}/` },
         }}
       />
-      <h1 className="sr-only">WeCinema Pricing — Plans for Creators and Buyers</h1>
       <ExploreContent appUrl={clientEnv.NEXT_PUBLIC_APP_URL} />
       <div style={{ maxWidth: 960, margin: "0 auto", padding: "0 24px 56px" }}>
         <CollectionFaq heading="Pricing — FAQ" faqs={FAQS} />

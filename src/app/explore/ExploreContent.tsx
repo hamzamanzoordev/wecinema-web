@@ -2,20 +2,19 @@
 
 import { useState, useEffect, useCallback, useRef, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
 import {
   PayPalScriptProvider,
   PayPalButtons,
   usePayPalScriptReducer,
   FUNDING,
 } from "@paypal/react-paypal-js";
-import { FaCrown, FaBolt } from "react-icons/fa";
-import { Loader2 } from "lucide-react";
+import { Elements, PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js";
+import { ArrowLeft, Check, CheckCircle2, CreditCard, Loader2, Lock, RefreshCw } from "lucide-react";
 import { useAuth } from "@/features/auth/context/AuthContext";
-import * as authService from "@/features/auth/services/authService";
 import { AppError, api } from "@/features/auth/services/apiClient";
-import { GoogleSignInButton, FullScreenSpinner } from "@/components/auth/shared";
+import { FullScreenSpinner } from "@/components/auth/shared";
 import { trackSubscription, trackBeginCheckout } from "@/lib/analytics/track";
+import { getStripePromise, STRIPE_APPEARANCE } from "@/features/payments/stripeClient";
 
 // ─── Types ─────────────────────────────────────────────────────
 
@@ -60,37 +59,137 @@ async function captureTestOrder(orderId: string, planId: PlanId, userType: UserM
   return api.post<CaptureOrderResponse>("/payments/capture-order", { orderId, planId, userType });
 }
 
+interface CardIntentResponse { clientSecret: string; paymentIntentId: string; amountCents: number }
+
+async function createCardIntent(planId: PlanId, userType: UserMode): Promise<CardIntentResponse> {
+  const res = await api.post<CardIntentResponse>("/payments/stripe/create-intent", { planId, userType });
+  if (!res?.clientSecret) throw new Error("Could not start card payment");
+  return res;
+}
+
+async function confirmCardPayment(paymentIntentId: string): Promise<CaptureOrderResponse> {
+  return api.post<CaptureOrderResponse>("/payments/stripe/confirm", { paymentIntentId });
+}
+
 // ─── Static data ───────────────────────────────────────────────
 
 const PLANS = [
   {
     id: "user" as PlanId,
-    badge: "Popular",
+    name: "Basic",
     title: "Basic Plan",
     price: "$5/month",
     amount: 5,
-    description: "Perfect for individual users",
-    accentColor: "var(--color-accent-primary)",
-    features: ["Buy Films & Scripts", "Sell Your Content", "Basic Support", "Access to Community", "5GB Storage"],
+    description: "For individual buyers and creators.",
+    highlighted: false,
+    features: ["Buy films & scripts", "Sell your content", "Community access", "5GB storage", "Standard support"],
   },
   {
     id: "studio" as PlanId,
-    badge: "Pro",
+    name: "Pro",
     title: "Pro Plan",
     price: "$10/month",
     amount: 10,
-    description: "Advanced features for professionals",
-    accentColor: "#8B5CF6",
-    features: ["All Basic Features", "Early Feature Access", "Priority Support", "Team Collaboration"],
+    description: "For studios and high-volume creators.",
+    highlighted: true,
+    features: ["Everything in Basic", "Early feature access", "Team collaboration", "Priority support"],
   },
 ];
 
-const FIREBASE_ERRORS: Record<string, string> = {
-  "auth/popup-closed-by-user": "Sign-in cancelled.",
-  "auth/cancelled-popup-request": "Sign-in cancelled.",
-  "auth/email-already-in-use": "Email already in use.",
-  "auth/user-not-found": "Account not found.",
+// ─── Shared UI ─────────────────────────────────────────────────
+
+const primaryButton: React.CSSProperties = {
+  display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+  width: "100%", padding: "12px 0", borderRadius: 10, border: "none",
+  background: "var(--color-accent-primary)", color: "#000",
+  fontSize: 14, fontWeight: 600, cursor: "pointer", textDecoration: "none",
 };
+
+const secondaryButton: React.CSSProperties = {
+  ...primaryButton,
+  background: "transparent", color: "var(--color-text-primary)",
+  border: "1px solid var(--color-border-secondary)",
+};
+
+const textLink: React.CSSProperties = {
+  background: "transparent", border: "none", padding: 0,
+  color: "var(--color-text-tertiary)", fontSize: 13, cursor: "pointer", textDecoration: "none",
+};
+
+function SegmentedControl<T extends string>({
+  value, options, onChange, label,
+}: {
+  value: T; options: { value: T; label: string }[]; onChange: (v: T) => void; label: string;
+}) {
+  return (
+    <div
+      role="radiogroup"
+      aria-label={label}
+      style={{
+        display: "flex", padding: 4, gap: 4, borderRadius: 10,
+        background: "var(--color-bg-tertiary)", border: "1px solid var(--color-border-secondary)",
+      }}
+    >
+      {options.map((o) => {
+        const active = o.value === value;
+        return (
+          <button
+            key={o.value}
+            type="button"
+            role="radio"
+            aria-checked={active}
+            onClick={() => onChange(o.value)}
+            style={{
+              flex: 1, padding: "8px 16px", borderRadius: 7, border: "none",
+              fontSize: 13, fontWeight: 600, cursor: "pointer", whiteSpace: "nowrap",
+              transition: "background 0.15s, color 0.15s",
+              background: active ? "var(--color-bg-elevated)" : "transparent",
+              color: active ? "var(--color-text-primary)" : "var(--color-text-tertiary)",
+              boxShadow: active ? "0 1px 3px rgba(0,0,0,0.12)" : "none",
+            }}
+          >
+            {o.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+function ErrorDialog({ message, onClose }: { message: string; onClose: () => void }) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  return (
+    <>
+      <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 50 }} onClick={onClose} />
+      <div
+        role="alertdialog"
+        aria-modal="true"
+        aria-label="Payment error"
+        style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%,-50%)", zIndex: 51, background: "var(--color-bg-elevated)", borderRadius: 16, padding: 24, maxWidth: 380, width: "calc(100% - 32px)", border: "1px solid var(--color-border-secondary)" }}
+      >
+        <p style={{ fontSize: 14, color: "var(--color-text-secondary)", margin: "0 0 16px", textAlign: "center", lineHeight: 1.5 }}>{message}</p>
+        <button type="button" autoFocus onClick={onClose} style={primaryButton}>Close</button>
+      </div>
+    </>
+  );
+}
+
+function StatusIcon() {
+  return (
+    <div style={{
+      width: 56, height: 56, borderRadius: "50%", marginBottom: 20,
+      background: "color-mix(in srgb, var(--color-success) 14%, transparent)",
+      display: "flex", alignItems: "center", justifyContent: "center",
+    }}>
+      <CheckCircle2 size={28} color="var(--color-success)" aria-hidden />
+    </div>
+  );
+}
 
 // ─── PayPal inner buttons ──────────────────────────────────────
 
@@ -201,14 +300,14 @@ function TestPaymentButton({
 
   return (
     <div>
-      <p style={{ margin: "0 0 10px", padding: "8px 10px", borderRadius: 10, fontSize: 12, fontWeight: 600, background: "rgba(245,158,11,0.12)", color: "#B45309", border: "1px solid rgba(245,158,11,0.35)" }}>
+      <p style={{ margin: "0 0 12px", padding: "8px 12px", borderRadius: 8, fontSize: 12, fontWeight: 600, background: "rgba(245,158,11,0.12)", color: "#B45309", border: "1px solid rgba(245,158,11,0.35)" }}>
         TEST MODE — no real payment will be taken.
       </p>
       <button
         type="button"
         onClick={pay}
         disabled={processing}
-        style={{ width: "100%", padding: "12px 0", borderRadius: 12, border: "none", fontSize: 15, fontWeight: 700, cursor: processing ? "wait" : "pointer", opacity: processing ? 0.7 : 1, background: "linear-gradient(135deg,#FBBF24,#F59E0B)", color: "#000" }}
+        style={{ ...primaryButton, cursor: processing ? "wait" : "pointer", opacity: processing ? 0.7 : 1 }}
       >
         {processing ? "Processing…" : "Complete test payment"}
       </button>
@@ -216,14 +315,135 @@ function TestPaymentButton({
   );
 }
 
+// ─── Stripe card payment (debit / credit) ──────────────────────
+
+function CardForm({
+  planId, paymentIntentId, onSuccess,
+}: {
+  planId: PlanId; paymentIntentId: string; onSuccess: () => void;
+}) {
+  const stripe = useStripe();
+  const elements = useElements();
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const plan = PLANS.find((p) => p.id === planId)!;
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!stripe || !elements || submitting) return;
+
+    setSubmitting(true);
+    setError(null);
+
+    const { error: submitError } = await elements.submit();
+    if (submitError) {
+      setError(submitError.message ?? "Please check your card details.");
+      setSubmitting(false);
+      return;
+    }
+
+    const { error: confirmError } = await stripe.confirmPayment({
+      elements,
+      // Only redirects when the card requires it (3DS). The return is handled
+      // by the payment_intent query param check in ExploreContentInner.
+      redirect: "if_required",
+      confirmParams: {
+        return_url: `${window.location.origin}${window.location.pathname}?plan=${planId}`,
+      },
+    });
+
+    if (confirmError) {
+      setError(confirmError.message ?? "Payment failed. Please try another card.");
+      setSubmitting(false);
+      return;
+    }
+
+    // Charged. Activate now rather than waiting on the webhook; the backend
+    // ignores a payment it has already applied, so both paths are safe.
+    try {
+      await confirmCardPayment(paymentIntentId);
+    } catch {
+      // The webhook will still activate it.
+    }
+    onSuccess();
+  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <PaymentElement
+        options={{ layout: "tabs" }}
+        onLoadError={() => setError("Could not load the card form. Please reload the page.")}
+      />
+      {error && <p style={{ margin: "10px 0 0", color: "var(--color-danger)", fontSize: 13 }}>{error}</p>}
+      <button
+        type="submit"
+        disabled={!stripe || submitting}
+        style={{ ...primaryButton, marginTop: 16, cursor: submitting ? "wait" : "pointer", opacity: !stripe || submitting ? 0.7 : 1 }}
+      >
+        {submitting ? "Processing…" : <><Lock size={14} aria-hidden /> Pay ${plan.amount}</>}
+      </button>
+    </form>
+  );
+}
+
+function StripeCardPayment({
+  planId, userType, onSuccess,
+}: {
+  planId: PlanId; userType: UserMode; onSuccess: () => void;
+}) {
+  const [intent, setIntent] = useState<CardIntentResponse | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Parent keys this component on plan + user type, so state starts fresh.
+    let cancelled = false;
+    createCardIntent(planId, userType)
+      .then((res) => { if (!cancelled) setIntent(res); })
+      .catch((e) => { if (!cancelled) setLoadError(e instanceof Error ? e.message : "Could not start card payment."); });
+    return () => { cancelled = true; };
+  }, [planId, userType]);
+
+  if (loadError) return <p style={{ textAlign: "center", color: "var(--color-danger)", fontSize: 13 }}>{loadError}</p>;
+  if (!intent) return <p style={{ textAlign: "center", color: "var(--color-text-tertiary)", fontSize: 13 }}>Setting up secure checkout…</p>;
+
+  return (
+    <Elements stripe={getStripePromise()} options={{ clientSecret: intent.clientSecret, appearance: STRIPE_APPEARANCE }}>
+      <CardForm planId={planId} paymentIntentId={intent.paymentIntentId} onSuccess={onSuccess} />
+    </Elements>
+  );
+}
+
+function PaymentMethodToggle({ method, onChange }: { method: "paypal" | "card"; onChange: (m: "paypal" | "card") => void }) {
+  return (
+    <div style={{ marginBottom: 16 }}>
+      <SegmentedControl
+        label="Payment method"
+        value={method}
+        onChange={onChange}
+        options={[{ value: "paypal", label: "PayPal" }, { value: "card", label: "Debit / Credit card" }]}
+      />
+    </div>
+  );
+}
+
+function SummaryRow({ label, value, strong = false }: { label: string; value: React.ReactNode; strong?: boolean }) {
+  return (
+    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 16, fontSize: strong ? 15 : 13 }}>
+      <span style={{ color: strong ? "var(--color-text-primary)" : "var(--color-text-tertiary)", fontWeight: strong ? 600 : 400 }}>{label}</span>
+      <span style={{ color: "var(--color-text-primary)", fontWeight: strong ? 700 : 500 }}>{value}</span>
+    </div>
+  );
+}
+
 function PayPalPayment({
-  userId, planId, userType, testMode = false, onSuccess, onError, onSkip,
+  userId, planId, userType, testMode = false, onSuccess, onError, onSkip, onBack,
 }: {
   userId: string; planId: PlanId; userType: UserMode; testMode?: boolean;
-  onSuccess: () => void; onError: (msg: string) => void; onSkip: () => void;
+  onSuccess: () => void; onError: (msg: string) => void; onSkip: () => void; onBack: () => void;
 }) {
   const [clientId, setClientId] = useState("");
   const [loading, setLoading] = useState(true);
+  const [method, setMethod] = useState<"paypal" | "card">("paypal");
 
   useEffect(() => {
     fetchPaypalClientId().then((id) => { setClientId(id); setLoading(false); });
@@ -232,24 +452,38 @@ function PayPalPayment({
   const plan = PLANS.find((p) => p.id === planId)!;
 
   return (
-    <div style={{ maxWidth: 440, margin: "0 auto", padding: "32px 24px" }}>
+    <div style={{ maxWidth: 440, margin: "0 auto", padding: "24px 16px 48px" }}>
+      <button type="button" onClick={onBack} style={{ ...textLink, display: "inline-flex", alignItems: "center", gap: 6, marginBottom: 16 }}>
+        <ArrowLeft size={14} aria-hidden /> Change plan
+      </button>
+
       <div style={{
-        background: "var(--color-bg-elevated)", borderRadius: 20, padding: "28px 24px",
+        background: "var(--color-bg-elevated)", borderRadius: 16, padding: 24,
         border: "1px solid var(--color-border-secondary)",
-        boxShadow: "0 4px 24px rgba(0,0,0,0.08)",
       }}>
-        <h2 style={{ margin: "0 0 4px", fontSize: 22, fontWeight: 800, fontFamily: "var(--font-heading)", color: "var(--color-text-primary)" }}>
-          Complete Subscription
+        <h2 style={{ margin: "0 0 16px", fontSize: 20, fontWeight: 700, fontFamily: "var(--font-heading)", color: "var(--color-text-primary)" }}>
+          Checkout
         </h2>
-        <p style={{ margin: "0 0 4px", fontSize: 14, color: "var(--color-text-tertiary)" }}>{plan.title} — {plan.price}</p>
-        <p style={{ margin: "0 0 4px", fontSize: 13, color: "var(--color-text-tertiary)" }}>User type: {userType === "buyer" ? "Buyer" : "Seller"}</p>
-        <p style={{ margin: "0 0 4px", fontSize: 13, color: "var(--color-text-tertiary)" }}>Duration: 30 days</p>
-        <p style={{ margin: "0 0 4px", fontSize: 18, fontWeight: 700, color: "var(--color-text-primary)" }}>Total: ${plan.amount}</p>
-        <p style={{ margin: "0 0 20px", fontSize: 12, color: "var(--color-text-tertiary)" }}>Secure payment powered by PayPal</p>
+
+        <div style={{
+          display: "flex", flexDirection: "column", gap: 10, padding: 16, marginBottom: 20,
+          borderRadius: 12, background: "var(--color-bg-tertiary)", border: "1px solid var(--color-border-secondary)",
+        }}>
+          <SummaryRow label="Plan" value={plan.title} />
+          <SummaryRow label="Account type" value={userType === "buyer" ? "Buyer" : "Seller"} />
+          <SummaryRow label="Billing period" value="30 days" />
+          <div style={{ height: 1, background: "var(--color-border-secondary)", margin: "4px 0" }} />
+          <SummaryRow label="Total" value={<>${plan.amount}<span style={{ fontSize: 12, fontWeight: 400, color: "var(--color-text-tertiary)" }}> / month</span></>} strong />
+        </div>
 
         {testMode ? (
           <TestPaymentButton planId={planId} userType={userType} onSuccess={onSuccess} onError={onError} />
-        ) : loading ? (
+        ) : (
+          <>
+            <PaymentMethodToggle method={method} onChange={setMethod} />
+            {method === "card" ? (
+              <StripeCardPayment key={`${planId}:${userType}`} planId={planId} userType={userType} onSuccess={onSuccess} />
+            ) : loading ? (
           <p style={{ textAlign: "center", color: "var(--color-text-tertiary)", fontSize: 13 }}>Loading payment options…</p>
         ) : !clientId ? (
           <p style={{ textAlign: "center", color: "var(--color-text-tertiary)", fontSize: 13 }}>Payment not configured. Contact support.</p>
@@ -257,20 +491,17 @@ function PayPalPayment({
           <PayPalScriptProvider options={{ clientId, currency: "USD", intent: "capture", components: "buttons" }}>
             <PayPalButtonsInner userId={userId} planId={planId} userType={userType} onSuccess={onSuccess} onError={onError} />
           </PayPalScriptProvider>
+            )}
+          </>
         )}
 
-        <button
-          type="button"
-          onClick={onSkip}
-          style={{
-            marginTop: 12, width: "100%", padding: "10px 0",
-            background: "transparent", border: "1px solid var(--color-border-secondary)",
-            borderRadius: 12, fontSize: 13, fontWeight: 500,
-            color: "var(--color-text-tertiary)", cursor: "pointer",
-          }}
-        >
-          Skip for Now
-        </button>
+        <p style={{ margin: "16px 0 0", display: "flex", alignItems: "center", justifyContent: "center", gap: 6, fontSize: 12, color: "var(--color-text-tertiary)" }}>
+          <Lock size={12} aria-hidden /> Payments are encrypted and processed by PayPal &amp; Stripe
+        </p>
+      </div>
+
+      <div style={{ textAlign: "center", marginTop: 16 }}>
+        <button type="button" onClick={onSkip} style={textLink}>Skip for now</button>
       </div>
     </div>
   );
@@ -282,19 +513,12 @@ function SuccessScreen({ planId, userType }: { planId: PlanId; userType: UserMod
   const plan = PLANS.find((p) => p.id === planId)!;
   return (
     <div style={{ minHeight: "60vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "48px 24px", textAlign: "center" }}>
-      <div style={{
-        width: 80, height: 80, borderRadius: "50%", marginBottom: 20,
-        background: "linear-gradient(135deg,#FBBF24,#F59E0B)",
-        display: "flex", alignItems: "center", justifyContent: "center",
-        boxShadow: "0 8px 32px rgba(245,158,11,0.35)",
-      }}>
-        <FaCrown size={32} color="#fff" />
-      </div>
-      <h2 style={{ margin: "0 0 8px", fontSize: 26, fontWeight: 900, fontFamily: "var(--font-heading)", color: "var(--color-text-primary)" }}>
-        Welcome to HypeMode!
+      <StatusIcon />
+      <h2 style={{ margin: "0 0 8px", fontSize: 24, fontWeight: 700, fontFamily: "var(--font-heading)", color: "var(--color-text-primary)" }}>
+        You&apos;re all set
       </h2>
-      <p style={{ margin: "0 0 6px", fontSize: 15, color: "var(--color-text-secondary)" }}>
-        {plan.title} activated — {userType === "buyer" ? "Buyer" : "Seller"} mode
+      <p style={{ margin: "0 0 8px", fontSize: 15, color: "var(--color-text-secondary)" }}>
+        Your {plan.title} is active ({userType === "buyer" ? "Buyer" : "Seller"} account).
       </p>
       <p style={{ margin: 0, fontSize: 13, color: "var(--color-text-tertiary)" }}>Redirecting you home…</p>
     </div>
@@ -314,16 +538,15 @@ export function ExploreContent(props: { appUrl: string }) {
 function ExploreContentInner({ appUrl: _appUrl }: { appUrl: string }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { authUser, isAuthenticated, applyLogin, refreshUser } = useAuth();
+  const { authUser, isAuthenticated, refreshUser } = useAuth();
 
-  const [mode, setMode] = useState<UserMode>("buyer");
-  // Restore a plan selected before being redirected through login/signup.
+  // Restore the plan and account type chosen before being redirected through login.
+  const [mode, setMode] = useState<UserMode>(() => (searchParams.get("mode") === "seller" ? "seller" : "buyer"));
   const [selectedPlan, setSelectedPlan] = useState<PlanId | null>(() => {
     const planParam = searchParams.get("plan");
     return planParam === "user" || planParam === "studio" ? planParam : null;
   });
   const [phase, setPhase] = useState<"plans" | "payment" | "success" | "already_premium">("plans");
-  const [googleLoading, setGoogleLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [showError, setShowError] = useState(false);
 
@@ -347,32 +570,6 @@ function ExploreContentInner({ appUrl: _appUrl }: { appUrl: string }) {
       .catch(() => { /* treat as not paid */ });
   }, [isAuthenticated, authUser, selectedPlan, phase]);
 
-  const handleGoogleLogin = useCallback(async () => {
-    if (!selectedPlan) return;
-    setGoogleLoading(true);
-    setErrorMsg("");
-    try {
-      const res = await authService.loginWithGoogle();
-      applyLogin(res);
-
-      const status = await getSubscriptionStatus(res.user._id).catch(() => null);
-      if (status?.hasPaid && !status.isExpired && !res.user.isTestAccount) {
-        setPhase("already_premium");
-        return;
-      }
-      setPhase("payment");
-    } catch (err: unknown) {
-      const code = (err as { code?: string })?.code ?? "";
-      if (code === "auth/popup-closed-by-user" || code === "auth/cancelled-popup-request") return;
-      const msg = (FIREBASE_ERRORS[code]) ||
-        (err instanceof AppError ? err.message : "Google sign-in failed. Please try again.");
-      setErrorMsg(msg);
-      setShowError(true);
-    } finally {
-      setGoogleLoading(false);
-    }
-  }, [selectedPlan, applyLogin]);
-
   const handlePaymentSuccess = useCallback(async () => {
     // Fire before the redirect — the page unmounts 2.5s later.
     const plan = PLANS.find((p) => p.id === selectedPlan);
@@ -382,6 +579,21 @@ function ExploreContentInner({ appUrl: _appUrl }: { appUrl: string }) {
     setTimeout(() => router.replace("/"), 2500);
   }, [router, refreshUser, selectedPlan]);
 
+  // Returning from a 3DS card redirect: Stripe appends payment_intent and
+  // redirect_status to return_url. A failed redirect just lands back on the
+  // payment step (via ?plan=) so the user can retry.
+  const redirectHandledRef = useRef(false);
+  useEffect(() => {
+    const paymentIntentId = searchParams.get("payment_intent");
+    if (redirectHandledRef.current || !paymentIntentId || !isAuthenticated) return;
+    if (searchParams.get("redirect_status") !== "succeeded") return;
+    redirectHandledRef.current = true;
+    authCheckedRef.current = true; // skip the "already premium" check; we just paid
+    confirmCardPayment(paymentIntentId)
+      .catch(() => { /* the webhook will still activate it */ })
+      .finally(() => { handlePaymentSuccess(); });
+  }, [searchParams, isAuthenticated, handlePaymentSuccess]);
+
   // Reaching the payment step is the checkout start.
   useEffect(() => {
     if (phase !== "payment" || !selectedPlan) return;
@@ -389,35 +601,26 @@ function ExploreContentInner({ appUrl: _appUrl }: { appUrl: string }) {
     if (plan) trackBeginCheckout({ plan: plan.title, value: plan.amount });
   }, [phase, selectedPlan]);
 
+  const closeError = useCallback(() => setShowError(false), []);
+
   // ── Already premium screen ─────────────────────────────────────
   if (phase === "already_premium") {
     return (
-      <div style={{ minHeight: "100vh", backgroundColor: "var(--color-bg-tertiary)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "48px 24px", textAlign: "center" }}>
-        <div style={{ width: 80, height: 80, borderRadius: "50%", marginBottom: 20, background: "linear-gradient(135deg,#FFBB00,#E6A800)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 8px 32px rgba(255,187,0,0.35)" }}>
-          <FaCrown size={32} color="#fff" />
-        </div>
-        <h2 style={{ margin: "0 0 10px", fontSize: 28, fontWeight: 900, fontFamily: "var(--font-heading)", color: "var(--color-text-primary)" }}>
-          You&apos;re Already on HypeMode!
+      <div style={{ minHeight: "70vh", backgroundColor: "var(--color-bg-tertiary)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "48px 16px", textAlign: "center" }}>
+        <StatusIcon />
+        <h2 style={{ margin: "0 0 8px", fontSize: 24, fontWeight: 700, fontFamily: "var(--font-heading)", color: "var(--color-text-primary)" }}>
+          You&apos;re already subscribed
         </h2>
-        <p style={{ margin: "0 0 6px", fontSize: 15, color: "var(--color-text-secondary)", maxWidth: 380 }}>
-          You already have an active HypeMode Premium subscription.
+        <p style={{ margin: "0 0 24px", fontSize: 15, color: "var(--color-text-secondary)", maxWidth: 380, lineHeight: 1.5 }}>
+          Your plan is active. Premium content and all features are unlocked.
         </p>
-        <p style={{ margin: "0 0 28px", fontSize: 13, color: "var(--color-text-tertiary)" }}>
-          Enjoy exclusive content, ad-free streaming, and all premium features.
-        </p>
-        <button
-          type="button"
-          onClick={() => router.push("/hypemode")}
-          style={{ padding: "12px 32px", borderRadius: 14, border: "none", background: "linear-gradient(135deg,#FFBB00,#E6A800)", color: "#fff", fontSize: 15, fontWeight: 700, cursor: "pointer", boxShadow: "0 4px 16px rgba(255,187,0,0.3)" }}
-        >
-          Go to HypeMode Content
-        </button>
-        <button
-          type="button"
-          onClick={() => router.push("/")}
-          style={{ marginTop: 12, background: "transparent", border: "none", color: "var(--color-text-tertiary)", fontSize: 13, cursor: "pointer" }}
-        >
-          Back to Home
+        <div style={{ width: "100%", maxWidth: 280 }}>
+          <button type="button" onClick={() => router.push("/hypemode")} style={primaryButton}>
+            Go to HypeMode
+          </button>
+        </div>
+        <button type="button" onClick={() => router.push("/")} style={{ ...textLink, marginTop: 16 }}>
+          Back to home
         </button>
       </div>
     );
@@ -427,7 +630,7 @@ function ExploreContentInner({ appUrl: _appUrl }: { appUrl: string }) {
   if (phase === "payment" && selectedPlan) {
     const userId = authUser?._id ?? "";
     return (
-      <div style={{ minHeight: "100vh", backgroundColor: "var(--color-bg-tertiary)", color: "var(--color-text-primary)", paddingTop: 40 }}>
+      <div style={{ minHeight: "100vh", backgroundColor: "var(--color-bg-tertiary)", color: "var(--color-text-primary)", paddingTop: 24 }}>
         <PayPalPayment
           userId={userId}
           planId={selectedPlan}
@@ -436,21 +639,14 @@ function ExploreContentInner({ appUrl: _appUrl }: { appUrl: string }) {
           onSuccess={handlePaymentSuccess}
           onError={(msg) => { setErrorMsg(msg); setShowError(true); }}
           onSkip={() => router.replace("/")}
+          onBack={() => setPhase("plans")}
         />
-        {showError && (
-          <>
-            <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 50 }} onClick={() => setShowError(false)} />
-            <div style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%,-50%)", zIndex: 51, background: "var(--color-bg-elevated)", borderRadius: 20, padding: "24px", maxWidth: 380, width: "calc(100% - 32px)", border: "1px solid var(--color-border-secondary)" }}>
-              <p style={{ fontSize: 14, color: "var(--color-text-secondary)", marginBottom: 16, textAlign: "center" }}>{errorMsg}</p>
-              <button onClick={() => setShowError(false)} style={{ width: "100%", padding: "10px 0", borderRadius: 12, border: "none", background: "var(--color-accent-primary)", color: "#000", fontWeight: 700, fontSize: 14, cursor: "pointer" }}>Close</button>
-            </div>
-          </>
-        )}
+        {showError && <ErrorDialog message={errorMsg} onClose={closeError} />}
       </div>
     );
   }
 
-  // ── Success phase ��─────────────────────────────────────────────
+  // ── Success phase ──────────────────────────────────────────────
   if (phase === "success" && selectedPlan) {
     return (
       <div style={{ minHeight: "100vh", backgroundColor: "var(--color-bg-tertiary)" }}>
@@ -460,162 +656,107 @@ function ExploreContentInner({ appUrl: _appUrl }: { appUrl: string }) {
   }
 
   // ── Plans phase ────────────────────────────────────────────────
+  const choosePlan = (planId: PlanId) => {
+    if (!isAuthenticated) {
+      // Signed-out users sign in first; login sends them back here and the
+      // ?plan= restore above takes them straight to checkout.
+      const returnTo = `/pricing?plan=${planId}&mode=${mode}`;
+      router.push(`/login?redirect=${encodeURIComponent(returnTo)}`);
+      return;
+    }
+    setSelectedPlan(planId);
+    setPhase("payment");
+  };
+
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "var(--color-bg-tertiary)", color: "var(--color-text-primary)" }}>
+      <div style={{ maxWidth: 880, margin: "0 auto", padding: "56px 16px 48px" }}>
 
-      {/* Hero */}
-      <div style={{ position: "relative", overflow: "hidden", padding: "64px 24px 56px", textAlign: "center", borderBottom: "1px solid var(--color-divider)" }}>
-        <div aria-hidden style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 70% 50% at 50% 0%, rgba(255,187,0,0.08) 0%, transparent 70%)", pointerEvents: "none" }} />
-        <div style={{ width: 64, height: 64, borderRadius: 18, background: "linear-gradient(135deg,#FFBB00,#E6A800)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 20px", boxShadow: "0 8px 32px rgba(255,187,0,0.35)" }}>
-          <FaCrown size={28} color="#fff" aria-hidden />
+        {/* Header */}
+        <header style={{ textAlign: "center", marginBottom: 32 }}>
+          <p style={{ margin: "0 0 12px", fontSize: 12, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--color-text-tertiary)" }}>
+            Pricing
+          </p>
+          <h1 style={{ margin: "0 0 12px", fontSize: "clamp(1.75rem,4vw,2.5rem)", fontWeight: 700, fontFamily: "var(--font-heading)", lineHeight: 1.15, color: "var(--color-text-primary)" }}>
+            Simple plans for creators and buyers
+          </h1>
+          <p style={{ margin: "0 auto", fontSize: 15, color: "var(--color-text-secondary)", maxWidth: 460, lineHeight: 1.6 }}>
+            Watching is free. Upgrade to buy, sell and list your work. Cancel anytime.
+          </p>
+        </header>
+
+        {/* Buyer / Seller toggle */}
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, marginBottom: 32 }}>
+          <span style={{ fontSize: 13, color: "var(--color-text-tertiary)" }}>I want to…</span>
+          <div style={{ width: 240 }}>
+            <SegmentedControl
+              label="Account type"
+              value={mode}
+              onChange={setMode}
+              options={[{ value: "buyer", label: "Buy" }, { value: "seller", label: "Sell" }]}
+            />
+          </div>
         </div>
-        <h1 style={{ margin: "0 0 12px", fontSize: "clamp(2rem,6vw,3.5rem)", fontWeight: 900, fontFamily: "var(--font-heading)", lineHeight: 1.1, color: "var(--color-text-primary)" }}>
-          Hype<span style={{ color: "var(--color-accent-primary)" }}>Mode</span>
-        </h1>
-        <p style={{ margin: "0 auto 8px", fontSize: "clamp(0.95rem,2vw,1.1rem)", color: "var(--color-text-secondary)", maxWidth: 480, lineHeight: 1.6 }}>
-          Exclusive premium content from the best creators on WeCinema.<br />Choose your plan and unlock everything.
-        </p>
-        <p style={{ margin: "8px 0 0", fontSize: 13, color: "var(--color-text-tertiary)" }}>
-          <FaBolt size={11} color="var(--color-accent-primary)" aria-hidden style={{ display: "inline", marginRight: 4 }} />
-          HD Streaming · Ad-Free · Marketplace Priority · Exclusive Content
-        </p>
-      </div>
 
-      {/* Buyer / Seller toggle */}
-      <div style={{ display: "flex", justifyContent: "center", gap: 12, padding: "36px 24px 0" }}>
-        {(["buyer", "seller"] as UserMode[]).map((m) => {
-          const active = mode === m;
-          return (
-            <button
-              key={m}
-              type="button"
-              onClick={() => setMode(m)}
-              style={{
-                padding: "8px 28px", borderRadius: 12, fontSize: 14, fontWeight: 700,
-                border: "1.5px solid", cursor: "pointer", transition: "all 0.15s",
-                borderColor: active ? "var(--color-accent-primary)" : "var(--color-border-secondary)",
-                backgroundColor: active ? "var(--color-accent-primary)" : "var(--color-bg-elevated)",
-                color: active ? "#000" : "var(--color-text-secondary)",
-                boxShadow: active ? "0 2px 8px rgba(255,187,0,0.25)" : "none",
-              }}
-            >
-              {m === "buyer" ? "Buyer" : "Seller"}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Plan cards */}
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 24, justifyContent: "center", padding: "32px 24px 40px", maxWidth: 800, margin: "0 auto" }}>
-        {PLANS.map((plan) => {
-          const isSelected = selectedPlan === plan.id;
-          return (
-            <div
-              key={plan.id}
-              role="button"
-              tabIndex={0}
-              aria-pressed={isSelected}
-              aria-label={`Select ${plan.title}`}
-              onClick={() => setSelectedPlan((p) => (p === plan.id ? null : plan.id))}
-              onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") setSelectedPlan((p) => (p === plan.id ? null : plan.id)); }}
-              style={{
-                position: "relative", flex: "1 1 300px", maxWidth: 360,
-                backgroundColor: "var(--color-bg-elevated)", borderRadius: 20,
-                padding: "24px 24px 28px", cursor: "pointer",
-                border: `2px solid ${isSelected ? "var(--color-accent-primary)" : "var(--color-border-secondary)"}`,
-                boxShadow: isSelected ? "0 4px 20px rgba(255,187,0,0.15)" : "0 1px 4px rgba(0,0,0,0.04)",
-                transform: isSelected ? "scale(1.02)" : "scale(1)",
-                transition: "border-color 0.2s, box-shadow 0.2s, transform 0.2s",
-                outline: "none",
-              }}
-            >
-              {/* Badge */}
-              <span style={{ position: "absolute", top: -13, left: 16, padding: "4px 12px", borderRadius: 9999, fontSize: 11, fontWeight: 800, color: "#fff", letterSpacing: "0.02em", backgroundColor: plan.accentColor }}>
-                {plan.badge}
-              </span>
-
-              <h3 style={{ margin: "8px 0 4px", fontSize: 20, fontWeight: 800, fontFamily: "var(--font-heading)", color: "var(--color-text-primary)" }}>{plan.title}</h3>
-              <p style={{ margin: "0 0 4px", fontSize: 30, fontWeight: 900, fontFamily: "var(--font-heading)", color: "var(--color-accent-primary)" }}>{plan.price}</p>
-              <p style={{ margin: "0 0 20px", fontSize: 13, color: "var(--color-text-tertiary)" }}>{plan.description}</p>
-
-              <ul style={{ margin: "0 0 20px", padding: 0, display: "flex", flexDirection: "column", gap: 10 }}>
-                {plan.features.map((f) => (
-                  <li key={f} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 13, color: "var(--color-text-secondary)" }}>
-                    <span style={{ color: "var(--color-success)", fontWeight: 700, fontSize: 15, flexShrink: 0 }}>✓</span>
-                    {f}
-                  </li>
-                ))}
-              </ul>
-
-              {/* Auth / pay CTA — shown when this plan is selected */}
-              {isSelected && (
-                <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 4 }} onClick={(e) => e.stopPropagation()}>
-                  {isAuthenticated ? (
-                    // Already logged in → go straight to payment
-                    <button
-                      type="button"
-                      onClick={() => setPhase("payment")}
-                      style={{
-                        display: "flex", alignItems: "center", justifyContent: "center",
-                        width: "100%", padding: "10px 0", borderRadius: 12, border: "none",
-                        backgroundColor: "var(--color-accent-primary)", color: "#000",
-                        fontSize: 14, fontWeight: 700, cursor: "pointer",
-                      }}
-                    >
-                      Continue to Payment
-                    </button>
-                  ) : (
-                    <div onClick={(e) => e.stopPropagation()}>
-                      {/* Google sign-in */}
-                      <GoogleSignInButton loading={googleLoading} onClick={handleGoogleLogin} />
-
-                      <div style={{ height: 10 }} />
-
-                      {/* Email sign-in link — carries the selected plan through the auth round-trip */}
-                      <Link
-                        href={`/login?redirect=${encodeURIComponent(`/explore?plan=${plan.id}`)}`}
-                        style={{
-                          display: "flex", alignItems: "center", justifyContent: "center",
-                          width: "100%", padding: "10px 0", borderRadius: 12, border: "none",
-                          backgroundColor: "var(--color-accent-primary)", color: "#000",
-                          fontSize: 14, fontWeight: 700, textDecoration: "none",
-                        }}
-                      >
-                        Sign In with Email
-                      </Link>
-
-                      <Link
-                        href={`/signup?redirect=${encodeURIComponent(`/explore?plan=${plan.id}`)}`}
-                        style={{ display: "block", marginTop: 10, textAlign: "center", fontSize: 13, color: "var(--color-text-tertiary)", textDecoration: "none" }}
-                      >
-                        Don&apos;t have an account?{" "}
-                        <span style={{ color: "var(--color-accent-primary)", fontWeight: 600 }}>Sign up free</span>
-                      </Link>
-                    </div>
+        {/* Plan cards */}
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 16, justifyContent: "center" }}>
+          {PLANS.map((plan) => {
+            const isSelected = selectedPlan === plan.id && !isAuthenticated;
+            return (
+              <div
+                key={plan.id}
+                style={{
+                  flex: "1 1 300px", maxWidth: 400, display: "flex", flexDirection: "column",
+                  backgroundColor: "var(--color-bg-elevated)", borderRadius: 16, padding: 24,
+                  border: `1px solid ${isSelected || plan.highlighted ? "var(--color-accent-primary)" : "var(--color-border-secondary)"}`,
+                  transition: "border-color 0.15s",
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
+                  <h2 style={{ margin: 0, fontSize: 17, fontWeight: 600, fontFamily: "var(--font-heading)", color: "var(--color-text-primary)" }}>{plan.name}</h2>
+                  {plan.highlighted && (
+                    <span style={{ fontSize: 11, fontWeight: 600, padding: "3px 10px", borderRadius: 9999, color: "var(--color-text-primary)", border: "1px solid var(--color-border-secondary)" }}>
+                      Most popular
+                    </span>
                   )}
                 </div>
-              )}
-            </div>
-          );
-        })}
+                <p style={{ margin: "0 0 20px", fontSize: 13, color: "var(--color-text-tertiary)" }}>{plan.description}</p>
+
+                <p style={{ margin: "0 0 20px", display: "flex", alignItems: "baseline", gap: 4 }}>
+                  <span style={{ fontSize: 40, fontWeight: 700, fontFamily: "var(--font-heading)", lineHeight: 1, color: "var(--color-text-primary)" }}>${plan.amount}</span>
+                  <span style={{ fontSize: 14, color: "var(--color-text-tertiary)" }}>/ month</span>
+                </p>
+
+                <button
+                  type="button"
+                  onClick={() => choosePlan(plan.id)}
+                  style={plan.highlighted ? primaryButton : secondaryButton}
+                >
+                  Choose {plan.name}
+                </button>
+
+                <ul style={{ listStyle: "none", margin: "24px 0 0", padding: "20px 0 0", borderTop: "1px solid var(--color-border-secondary)", display: "flex", flexDirection: "column", gap: 12 }}>
+                  {plan.features.map((f) => (
+                    <li key={f} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 14, color: "var(--color-text-secondary)" }}>
+                      <Check size={16} color="var(--color-success)" aria-hidden style={{ flexShrink: 0 }} />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Trust row */}
+        <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "8px 24px", marginTop: 32, fontSize: 13, color: "var(--color-text-tertiary)" }}>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}><Lock size={14} aria-hidden /> Secure checkout via Stripe &amp; PayPal</span>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}><RefreshCw size={14} aria-hidden /> Cancel anytime</span>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}><CreditCard size={14} aria-hidden /> Billed every 30 days</span>
+        </div>
       </div>
 
-      <p style={{ textAlign: "center", fontSize: 12, color: "var(--color-text-tertiary)", padding: "0 24px 48px" }}>
-        Secure payment powered by PayPal · Cancel anytime · 30-day billing cycle
-      </p>
-
-      {/* Error popup */}
-      {showError && (
-        <>
-          <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 50 }} onClick={() => setShowError(false)} />
-          <div style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%,-50%)", zIndex: 51, background: "var(--color-bg-elevated)", borderRadius: 20, padding: "24px", maxWidth: 380, width: "calc(100% - 32px)", border: "1px solid var(--color-border-secondary)" }}>
-            <p style={{ fontSize: 14, color: "var(--color-text-secondary)", marginBottom: 16, textAlign: "center" }}>{errorMsg}</p>
-            <button onClick={() => setShowError(false)} style={{ width: "100%", padding: "10px 0", borderRadius: 12, border: "none", background: "var(--color-accent-primary)", color: "#000", fontWeight: 700, fontSize: 14, cursor: "pointer" }}>
-              Close
-            </button>
-          </div>
-        </>
-      )}
+      {showError && <ErrorDialog message={errorMsg} onClose={closeError} />}
     </div>
   );
 }
