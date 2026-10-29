@@ -53,7 +53,7 @@ export async function generateMetadata({
       : "a WeCinema writer";
   const genres = genresOf(script);
   const body = plainText(script.script);
-  const title = `${script.title} — Script by ${author} | WeCinema`;
+  const title = `${script.title}: Script by ${author} | WeCinema`;
   const description =
     (body ? body.slice(0, 155) : "") ||
     `Read "${script.title}"${genres.length ? ` (${genres.join(", ")})` : ""}, an original screenplay on WeCinema. Discover and connect with independent writers and filmmakers.`;

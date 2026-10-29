@@ -168,7 +168,7 @@ export default function VideosPage() {
                         <span className="text-sm text-[var(--ap-text-2)]">{video.author?.username ?? "Unknown"}</span>
                       </div>
                     </td>
-                    <td className="px-4 py-3 text-sm text-[var(--ap-text-2)] font-mono">{video.genre ?? "—"}</td>
+                    <td className="px-4 py-3 text-sm text-[var(--ap-text-2)] font-mono">{video.genre ?? "-"}</td>
                     <td className="px-4 py-3">
                       <StatusBadge status={video.transcodingStatus} />
                     </td>

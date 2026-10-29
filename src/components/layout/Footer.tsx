@@ -131,7 +131,7 @@ export default function Footer() {
           letterSpacing: "0.02em",
         }}
       >
-        © {new Date().getFullYear()} WeCinema — All rights reserved.{" "}
+        © {new Date().getFullYear()} WeCinema. All rights reserved.{" "}
         <a
           href="https://wecinema.co"
           target="_blank"

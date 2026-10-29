@@ -115,7 +115,7 @@ export default function TermsPage() {
               Terms &amp; Conditions
             </h1>
             <p className="text-[13.5px] text-text-tertiary max-w-lg mx-auto leading-relaxed mb-4">
-              This agreement governs your use of WeCinema.co — including video uploading, streaming, marketplace transactions, chat, and payment processing.
+              This agreement governs your use of WeCinema.co, including video uploading, streaming, marketplace transactions, chat, and payment processing.
             </p>
             <div className="flex justify-center gap-3 flex-wrap">
               {[
@@ -186,14 +186,14 @@ export default function TermsPage() {
               </div>
 
               <Sub>2.3 Account Security</Sub>
-              <P>Your password is hashed using Argon2id and is never stored in plaintext. We will never ask for your password over email or chat. Sessions use short-lived JWTs (15-minute access tokens) with httpOnly refresh cookies — protect your login device accordingly.</P>
+              <P>Your password is hashed using Argon2id and is never stored in plaintext. We will never ask for your password over email or chat. Sessions use short-lived JWTs (15-minute access tokens) with httpOnly refresh cookies. Protect your login device accordingly.</P>
             </Section>
 
             {/* ── 3 ── */}
             <Section id="aup" title="3. Acceptable Use Policy">
               <Sub>3.1 Prohibited Content &amp; Services</Sub>
               <P>
-                WeCinema does not permit, and you may not upload, post, store, distribute, sell, promote, advertise, or otherwise make available through the platform — including in uploaded video, marketplace listings, profiles, thumbnails, or chat — any of the following prohibited content or services:
+                WeCinema does not permit, and you may not upload, post, store, distribute, sell, promote, advertise, or otherwise make available through the platform (including in uploaded video, marketplace listings, profiles, thumbnails, or chat) any of the following prohibited content or services:
               </P>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-3">
                 {[
@@ -234,7 +234,7 @@ export default function TermsPage() {
                   "Use automated scripts, bots, or scrapers to collect data or interact with the platform.",
                   "Attempt to bypass payment processing or conduct transactions outside the platform.",
                   "Engage in fraudulent chargebacks, fake reviews, or manipulation of analytics.",
-                  "Distribute content involving the sexual exploitation of minors (CSAM) — zero tolerance; immediately reported to authorities.",
+                  "Distribute content involving the sexual exploitation of minors (CSAM), zero tolerance; immediately reported to authorities.",
                   "Promote, support, or glorify terrorism or violent extremism, or incite or threaten violence against individuals or groups.",
                   "Promote hate speech or discrimination against individuals or protected groups.",
                   "Violate any applicable local, national, or international law or regulation.",
@@ -246,7 +246,7 @@ export default function TermsPage() {
                 ))}
               </div>
               <InfoBox variant="danger">
-                <strong>Zero-Tolerance Violations:</strong> CSAM, terrorism or violent-extremism content, and platform hacking result in immediate permanent bans and reports to law enforcement — no warnings issued.
+                <strong>Zero-Tolerance Violations:</strong> CSAM, terrorism or violent-extremism content, and platform hacking result in immediate permanent bans and reports to law enforcement, no warnings issued.
               </InfoBox>
             </Section>
 
@@ -264,12 +264,12 @@ export default function TermsPage() {
               </Ul>
 
               <Sub>4.2 Licence Grant to WeCinema</Sub>
-              <P>By uploading content, you grant WeCinema a <strong>non-exclusive, worldwide, royalty-free licence</strong> to host, store, transcode, distribute, and display your content for the purpose of operating the platform. This licence does not transfer ownership — you retain all copyright.</P>
+              <P>By uploading content, you grant WeCinema a <strong>non-exclusive, worldwide, royalty-free licence</strong> to host, store, transcode, distribute, and display your content for the purpose of operating the platform. This licence does not transfer ownership. You retain all copyright.</P>
               <P>WeCinema may generate multiple video renditions (1080p, 720p, 360p) via AWS MediaConvert for adaptive streaming, and may store WebP-converted thumbnails for performance optimisation.</P>
               <P>WeCinema may use thumbnails and short clips for promotional purposes (platform homepage, social media, marketing materials). You may opt out by contacting support.</P>
 
               <Sub>4.3 Content Removal</Sub>
-              <P>WeCinema reserves the right to remove any content that violates these Terms, our Acceptable Use Policy, or applicable law — without notice. For DMCA takedown requests, see Section 10.</P>
+              <P>WeCinema reserves the right to remove any content that violates these Terms, our Acceptable Use Policy, or applicable law, without notice. For DMCA takedown requests, see Section 10.</P>
             </Section>
 
             {/* ── 5 ── */}
@@ -281,7 +281,7 @@ export default function TermsPage() {
                   { name: "Basic",     desc: "Upload content, basic marketplace access." },
                   { name: "Premium",   desc: "Priority upload processing, enhanced analytics, increased storage." },
                   { name: "Studio",    desc: "Multi-creator management, advanced monetisation, API access." },
-                  { name: "Hypemode", desc: "Maximum visibility — homepage featuring, trending badge, priority search, push notifications.", accent: true },
+                  { name: "Hypemode", desc: "Maximum visibility: homepage featuring, trending badge, priority search, push notifications.", accent: true },
                 ].map((tier) => (
                   <div key={tier.name} className="p-4 rounded-xl border"
                     style={{
@@ -301,7 +301,7 @@ export default function TermsPage() {
               <Sub>5.2 Billing & Cancellation</Sub>
               <Ul>
                 <Li>Subscriptions are billed on a recurring basis (monthly or annually as selected).</Li>
-                <Li>You may cancel your subscription at any time — access continues until the end of the paid billing period.</Li>
+                <Li>You may cancel your subscription at any time. Access continues until the end of the paid billing period.</Li>
                 <Li>No refunds are issued for partial billing periods, except where required by law.</Li>
                 <Li>Price changes will be communicated with at least 30 days' notice before the next billing cycle.</Li>
               </Ul>
@@ -318,7 +318,7 @@ export default function TermsPage() {
                   "Complete Stripe Connect identity verification before receiving payouts.",
                   "Provide accurate listing descriptions, pricing, and realistic delivery timelines.",
                   "Disclose all usage restrictions, licence types, and exclusivity terms in the listing.",
-                  "Deliver work through the WeCinema platform — not via external channels.",
+                  "Deliver work through the WeCinema platform, not via external channels.",
                   "Respond to buyer messages within 48 hours of receipt.",
                 ].map((t) => <Li key={t}>{t}</Li>)}
               </Ul>
@@ -338,7 +338,7 @@ export default function TermsPage() {
                 {[
                   "Buyer creates order and payment is authorised (held in Stripe escrow).",
                   "Seller completes and delivers work through the platform chat/delivery system.",
-                  "Buyer reviews delivery — approve to release payment or raise a dispute within 48 hours.",
+                  "Buyer reviews delivery: approve to release payment or raise a dispute within 48 hours.",
                   "Upon approval, platform fee is deducted and remainder transferred to seller's Stripe account.",
                 ].map((step, i) => (
                   <div key={step} className="flex items-start gap-3 px-4 py-3 rounded-xl bg-bg-secondary border border-border-secondary">
@@ -384,7 +384,7 @@ export default function TermsPage() {
               </div>
 
               <Sub>7.3 Escrow & Payment Release</Sub>
-              <P>Funds are authorised (not captured) at order creation using Stripe&apos;s manual capture flow. Payment is captured — and transferred to the seller — only upon buyer confirmation of delivery or after the 48-hour dispute window without objection.</P>
+              <P>Funds are authorised (not captured) at order creation using Stripe&apos;s manual capture flow. Payment is captured, and transferred to the seller, only upon buyer confirmation of delivery or after the 48-hour dispute window without objection.</P>
 
               <Sub>7.4 Dispute Resolution</Sub>
               <Ul>
@@ -412,7 +412,7 @@ export default function TermsPage() {
                 {[
                   "Keep communications professional and directly related to the order or transaction.",
                   "Do not share personal contact details (phone, external email, social media) until an order is completed.",
-                  "Use the platform chat for all order-related communications — this creates an evidence trail for dispute resolution.",
+                  "Use the platform chat for all order-related communications. This creates an evidence trail for dispute resolution.",
                   "All chat messages are stored in Firebase Firestore and may be reviewed by WeCinema in dispute proceedings.",
                 ].map((t) => <Li key={t}>{t}</Li>)}
               </Ul>
@@ -445,7 +445,7 @@ export default function TermsPage() {
                   { title: "Exclusive Licence",  desc: "All usage rights transferred to buyer. Seller may no longer use or resell the work." },
                   { title: "Adaptation Rights",  desc: "Right to create derivative works (sequels, remakes, adaptations) based on the original." },
                   { title: "Licensing Deal",     desc: "Custom terms negotiated between buyer and seller with platform oversight." },
-                  { title: "Commission Work",    desc: "Work created specifically for the buyer — buyer owns result subject to agreed terms." },
+                  { title: "Commission Work",    desc: "Work created specifically for the buyer: buyer owns result subject to agreed terms." },
                 ].map((r) => (
                   <div key={r.title} className="p-4 rounded-xl bg-bg-secondary border border-border-secondary">
                     <h5 className="text-[13px] font-semibold text-accent-primary mb-1.5">{r.title}</h5>
@@ -465,13 +465,13 @@ export default function TermsPage() {
                 {[
                   "Your full legal name, address, telephone number, and email address.",
                   "Identification of the copyrighted work you claim has been infringed.",
-                  "Identification of the infringing material — include the URL on wecinema.co.",
+                  "Identification of the infringing material. Include the URL on wecinema.co.",
                   "A statement that you have a good faith belief that the use is not authorised by the copyright owner, its agent, or the law.",
                   "A statement, under penalty of perjury, that the information in the notice is accurate and that you are the copyright owner or authorised to act on their behalf.",
                   "Your electronic or physical signature.",
                 ].map((t) => <Li key={t}>{t}</Li>)}
               </Ul>
-              <P>Send DMCA notices to: <strong>legal@wecinema.co</strong> — subject line: &quot;DMCA Takedown Notice.&quot;</P>
+              <P>Send DMCA notices to: <strong>legal@wecinema.co</strong>, subject line: &quot;DMCA Takedown Notice.&quot;</P>
 
               <Sub>10.2 Counter-Notice</Sub>
               <P>If you believe your content was wrongly removed, you may submit a counter-notice to legal@wecinema.co. We will forward it to the original complainant. If no legal action is filed within 10–14 business days, we may restore the content.</P>
@@ -515,7 +515,7 @@ export default function TermsPage() {
             {/* ── 12 ── */}
             <Section id="disclaimer" title="12. Warranty Disclaimer">
               <InfoBox variant="warning">
-                <strong>AS-IS BASIS:</strong> WeCinema is provided &quot;as is&quot; and &quot;as available&quot; without warranties of any kind — express or implied.
+                <strong>AS-IS BASIS:</strong> WeCinema is provided &quot;as is&quot; and &quot;as available&quot; without warranties of any kind, express or implied.
               </InfoBox>
               <P>To the maximum extent permitted by applicable law, WeCinema expressly disclaims all warranties, including but not limited to:</P>
               <Ul>
@@ -563,7 +563,7 @@ export default function TermsPage() {
               <P>Before initiating formal proceedings, you agree to first attempt to resolve any dispute informally by contacting legal@wecinema.co and giving us 30 days to respond.</P>
 
               <Sub>15.3 Binding Arbitration</Sub>
-              <P>If informal resolution fails, disputes shall be resolved by binding arbitration under the rules of the American Arbitration Association (AAA) — not in court, and not as a class action. This does not apply to injunctive relief claims or claims within small-claims court jurisdiction.</P>
+              <P>If informal resolution fails, disputes shall be resolved by binding arbitration under the rules of the American Arbitration Association (AAA), not in court, and not as a class action. This does not apply to injunctive relief claims or claims within small-claims court jurisdiction.</P>
 
               <Sub>15.4 Class Action Waiver</Sub>
               <P>You waive any right to bring or participate in any class-action lawsuit or class-wide arbitration against WeCinema. All disputes must be resolved on an individual basis.</P>

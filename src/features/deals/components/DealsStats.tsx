@@ -22,7 +22,7 @@ function Tile({ icon, color, value, label }: { icon: ReactNode; color: string; v
 }
 
 export function DealsStats({ stats, loading }: { stats: DealStats | null; loading?: boolean }) {
-  const v = (n: number | undefined) => (loading && !stats ? "—" : n ?? 0);
+  const v = (n: number | undefined) => (loading && !stats ? "-" : n ?? 0);
   return (
     <div className="grid grid-cols-2 gap-2.5 md:grid-cols-4">
       <Tile icon={<FileText size={15} />} color="var(--color-info)" value={v(stats?.total)} label="Total Deals" />
@@ -31,7 +31,7 @@ export function DealsStats({ stats, loading }: { stats: DealStats | null; loadin
       <Tile
         icon={<DollarSign size={15} />}
         color="var(--color-accent-primary)"
-        value={loading && !stats ? "—" : formatCents(stats?.totalValueCents ?? 0)}
+        value={loading && !stats ? "-" : formatCents(stats?.totalValueCents ?? 0)}
         label="Total Value"
       />
     </div>

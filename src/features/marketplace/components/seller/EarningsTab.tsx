@@ -123,7 +123,7 @@ const EarningsTab: React.FC<EarningsTabProps> = ({ onCreateListing, onSetupPayme
       {/* Error banner */}
       {statsError && (
         <div className="bg-danger-bg border border-border rounded-xl p-4 text-sm text-danger">
-          ⚠️ {statsError} — <button onClick={recheck} className="underline font-medium">try again</button>
+          ⚠️ {statsError}. <button onClick={recheck} className="underline font-medium">Try again</button>
         </div>
       )}
 

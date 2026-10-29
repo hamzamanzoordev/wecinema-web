@@ -46,7 +46,7 @@ export function OfferComparison({
         >
           <p className="text-[10px] text-accent">{counterLabel}</p>
           <p className="truncate text-base font-bold tabular-nums text-accent sm:text-lg">
-            {valid ? formatCents(counterCents) : "—"}
+            {valid ? formatCents(counterCents) : "-"}
           </p>
         </div>
       </div>

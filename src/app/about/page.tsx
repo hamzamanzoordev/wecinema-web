@@ -26,7 +26,7 @@ const FEATURES: WebsiteFeature[] = [
   { icon: <FaStore />, title: "Seller Marketplace", description: "Create listings, set prices, manage orders, and track earnings in one dashboard", details: ["Listing management", "Order tracking", "Earnings overview", "Offer negotiation"] },
   { icon: <FaShoppingCart />, title: "Buyer Order System", description: "Browse listings, send offers, place orders, and leave reviews after delivery", details: ["Secure checkout", "Offer system", "Order history", "Ratings & reviews"] },
   { icon: <FaComments />, title: "Real-time Chat", description: "Firebase-powered messaging between buyers and sellers, linked to each order", details: ["Real-time messaging", "Order-linked chats", "Typing indicators", "Read receipts"] },
-  { icon: <FaShieldAlt />, title: "Secure Payments", description: "Stripe and PayPal with escrow — funds are held until the buyer confirms delivery", details: ["Stripe", "PayPal", "Escrow protection", "Webhook verified"] },
+  { icon: <FaShieldAlt />, title: "Secure Payments", description: "Stripe and PayPal with escrow. Funds are held until the buyer confirms delivery", details: ["Stripe", "PayPal", "Escrow protection", "Webhook verified"] },
 ];
 
 const EXTRA_FEATURES: Feature[] = [
@@ -130,7 +130,7 @@ export default function AboutPage() {
           <h1 className="text-4xl font-bold text-white mb-3 leading-tight" style={{ fontFamily: "var(--font-heading)" }}>
             Welcome to <span className="underline underline-offset-[6px]">WeCinema</span>
           </h1>
-          <p className="text-lg font-medium text-white/90 mb-2">Buy &amp; sell video content — directly between creators and buyers</p>
+          <p className="text-lg font-medium text-white/90 mb-2">Buy &amp; sell video content: directly between creators and buyers</p>
           <p className="text-[15px] text-white/80 max-w-[640px] mx-auto mb-7 leading-relaxed">
             WeCinema is a marketplace for video creators. Sellers list their videos with a price, buyers browse and order securely, and payments are held in escrow until delivery is confirmed.
           </p>
@@ -284,7 +284,7 @@ export default function AboutPage() {
               </div>
               <h3 className="text-lg font-bold text-text-primary mb-1" style={{ fontFamily: "var(--font-heading)" }}>Scott</h3>
               <p className="text-[13px] text-accent-primary font-semibold mb-3">Founder &amp; Creator</p>
-              <p className="text-[13px] text-text-secondary leading-[1.7] mb-4">The visionary behind WeCinema. Scott conceived and created the platform with a mission to connect video creators directly with buyers — building a marketplace where talent meets opportunity.</p>
+              <p className="text-[13px] text-text-secondary leading-[1.7] mb-4">The visionary behind WeCinema. Scott conceived and created the platform with a mission to connect video creators directly with buyers, building a marketplace where talent meets opportunity.</p>
               <div className="flex flex-wrap gap-1.5 justify-center">
                 {["Vision", "Strategy", "Product"].map((t) => (
                   <span
@@ -322,7 +322,7 @@ export default function AboutPage() {
               </div>
               <h3 className="text-lg font-bold text-text-primary mb-1" style={{ fontFamily: "var(--font-heading)" }}>Hamza Manzoor</h3>
               <p className="text-[13px] font-semibold mb-3" style={{ color: "#6366f1" }}>Full Stack Developer</p>
-              <p className="text-[13px] text-text-secondary leading-[1.7] mb-4">Built WeCinema from the ground up — React 18 + TypeScript frontend, Node.js + Express + MongoDB backend, Firebase real-time chat, Stripe &amp; PayPal payments, and AWS S3 storage.</p>
+              <p className="text-[13px] text-text-secondary leading-[1.7] mb-4">Built WeCinema from the ground up: React 18 + TypeScript frontend, Node.js + Express + MongoDB backend, Firebase real-time chat, Stripe &amp; PayPal payments, and AWS S3 storage.</p>
               <div className="flex flex-wrap gap-1.5 justify-center">
                 {["React", "Node.js", "MongoDB", "AWS S3"].map((t) => (
                   <span
@@ -387,7 +387,7 @@ export default function AboutPage() {
         >
           <h2 className="text-2xl font-bold text-white mb-3 max-w-[600px] mx-auto" style={{ fontFamily: "var(--font-heading)" }}>Ready to buy or sell video content?</h2>
           <p className="text-[15px] text-white/85 max-w-[560px] mx-auto mb-7 leading-relaxed">
-            Create a free account, set up your seller profile, and start listing your videos — or browse the marketplace and order from creators directly.
+            Create a free account, set up your seller profile, and start listing your videos, or browse the marketplace and order from creators directly.
           </p>
           <div className="flex gap-3 justify-center flex-wrap">
             <Link

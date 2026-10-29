@@ -49,7 +49,7 @@ const THEME_INIT_SCRIPT = `(function(){try{var m=localStorage.getItem('wc_theme'
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: `${SITE_NAME} — Watch, Create & Sell Films and Scripts Online`,
+    default: `${SITE_NAME}: Watch, Create & Sell Films and Scripts Online`,
     template: `%s | ${SITE_NAME}`,
   },
   description: DESCRIPTION,
@@ -75,13 +75,13 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: SITE_URL,
     siteName: SITE_NAME,
-    title: `${SITE_NAME} — Watch, Create & Sell Films`,
+    title: `${SITE_NAME}: Watch, Create & Sell Films`,
     description: DESCRIPTION,
     images: [{ url: OG.default, width: 1200, height: 630, alt: SITE_NAME }],
   },
   twitter: {
     card: "summary_large_image",
-    title: `${SITE_NAME} — Watch, Create & Sell Films`,
+    title: `${SITE_NAME}: Watch, Create & Sell Films`,
     description: DESCRIPTION,
     images: [OG.default],
   },

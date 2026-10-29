@@ -13,7 +13,7 @@ import { VIDEO_ACCEPT } from "@/features/upload/lib/videoOptions";
 const PROMISES = [
   { icon: RotateCcw,  title: "Never starts over",  text: "If your internet drops, the upload pauses and picks up where it stopped." },
   { icon: ShieldCheck, title: "Saved as a draft",  text: "Only you can see it until you press Publish. Details save as you type." },
-  { icon: Navigation,  title: "Keep browsing",     text: "Uploads run in the background — watch progress on your profile icon." },
+  { icon: Navigation,  title: "Keep browsing",     text: "Uploads run in the background. Watch progress on your profile icon." },
 ];
 
 export default function UploadVideoPage() {

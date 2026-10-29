@@ -534,7 +534,7 @@ const CreateListing: React.FC = () => {
                       Click to upload thumbnail
                     </p>
                     <p className="text-text-tertiary text-xs theme-transition">
-                      Any image — auto-converted to WebP on upload
+                      Any image, auto-converted to WebP on upload
                     </p>
                     <input
                       id="thumbnail-upload"
@@ -573,7 +573,7 @@ const CreateListing: React.FC = () => {
                       Click to upload files
                     </p>
                     <p className="text-text-tertiary text-xs theme-transition">
-                      Images &amp; videos — up to {MAX_FILES} files
+                      Images &amp; videos, up to {MAX_FILES} files
                     </p>
                     <input
                       id="media-upload"

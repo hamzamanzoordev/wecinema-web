@@ -336,7 +336,7 @@ const ListingDetailClient: React.FC = () => {
                 >
                   {buying
                     ? <><FaSpinner className="animate-spin" /> Processing…</>
-                    : <><FaShoppingCart /> Buy Now — ${(listing.price ?? 0).toFixed(2)}</>
+                    : <><FaShoppingCart /> Buy Now · ${(listing.price ?? 0).toFixed(2)}</>
                   }
                 </button>
               )}

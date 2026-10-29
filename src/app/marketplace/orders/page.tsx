@@ -27,7 +27,7 @@ function formatCurrency(cents: number): string {
 }
 
 function formatDate(iso: string): string {
-  if (!iso) return '—';
+  if (!iso) return '-';
   const d = new Date(iso);
   const now = new Date();
   const diffDays = Math.floor((now.getTime() - d.getTime()) / 86_400_000);

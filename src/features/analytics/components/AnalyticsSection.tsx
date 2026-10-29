@@ -200,7 +200,7 @@ const AnalyticsSection: React.FC<AnalyticsSectionProps> = ({ title = "Analytics 
             </div>
             <div>
               <div style={S.collapsedTitle}>{isMobile ? "Analytics" : title}</div>
-              <div style={S.collapsedSub}>{isMobile ? "Tap to show" : "Hidden — click to show insights"}</div>
+              <div style={S.collapsedSub}>{isMobile ? "Tap to show" : "Hidden. Click to show insights"}</div>
             </div>
           </div>
           <button

@@ -380,7 +380,7 @@ const DeliveryModal: React.FC<DeliveryModalProps> = ({
                       {order.revisions ?? 0} used, {revisionsRemaining} remaining
                     </p>
                     {revisionsRemaining === 0 && (
-                      <p className="text-xs" style={{ color: 'var(--color-danger)' }}>No revisions left — final.</p>
+                      <p className="text-xs" style={{ color: 'var(--color-danger)' }}>No revisions left, final.</p>
                     )}
                     {revisionsRemaining > 0 && !isFinalDelivery && (
                       <span className="mp-badge mp-badge-warning text-[10px]">Draft</span>

@@ -30,7 +30,7 @@ export async function GET() {
 
   const body = `# WeCinema
 
-> WeCinema is the home of independent film — a platform where audiences watch indie movies and short films, and where filmmakers, writers and studios upload, showcase and sell their work (films, scripts and adaptation/licensing rights) to a global audience. Founded to give independent creators a direct-to-audience marketplace with escrow-protected payments.
+> WeCinema is the home of independent film: a platform where audiences watch indie movies and short films, and where filmmakers, writers and studios upload, showcase and sell their work (films, scripts and adaptation/licensing rights) to a global audience. Founded to give independent creators a direct-to-audience marketplace with escrow-protected payments.
 
 WeCinema combines a streaming catalog, a creator community (HypeMode), and a rights marketplace in one place. Primary audience: independent filmmakers, screenwriters, film studios, and film fans in the United States and worldwide.
 
@@ -40,11 +40,11 @@ WeCinema combines a streaming catalog, a creator community (HypeMode), and a rig
 - **For creators**: Upload films and scripts, build an audience, and sell work or license rights with escrow-protected payments (funds released on delivery).
 - **For viewers**: Stream independent films by genre, theme and rating; discover new creators.
 - **Marketplace types**: for-sale films, licensing, adaptation rights, and commissions.
-- **Pricing**: Free to watch and browse. Paid plans are Basic ($5/month) and Pro ($10/month). Selling is free to start — WeCinema takes a 15% fee on a sale only when it completes.
+- **Pricing**: Free to watch and browse. Paid plans are Basic ($5/month) and Pro ($10/month). Selling is free to start. WeCinema takes a 15% fee on a sale only when it completes.
 
 ## Main sections
 
-- [Home](${SITE}/): Overview of WeCinema — watch, create and sell films and scripts.
+- [Home](${SITE}/): Overview of WeCinema: watch, create and sell films and scripts.
 - [Explore](${SITE}/explore): Browse the full catalog of independent films.
 - [Pricing](${SITE}/pricing): Plan pricing for creators and buyers.
 - [Marketplace](${SITE}/marketplace): Buy and sell films, scripts, and adaptation/licensing rights.

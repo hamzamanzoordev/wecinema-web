@@ -9,9 +9,9 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { OG, SITE_ORIGIN } from "@/lib/seo";
 
 const SITE = SITE_ORIGIN;
-const TITLE = "Independent Film Marketplace — Buy, Sell & License Films | WeCinema";
+const TITLE = "Independent Film Marketplace: Buy, Sell & License Films | WeCinema";
 const DESCRIPTION =
-  "Buy, sell, and license independent films, scripts, and adaptation rights directly from creators — protected by Stripe escrow. Free to join on WeCinema.";
+  "Buy, sell, and license independent films, scripts, and adaptation rights directly from creators, protected by Stripe escrow. Free to join on WeCinema.";
 
 export const metadata: Metadata = {
   title: { absolute: TITLE },
@@ -50,12 +50,12 @@ const BUYER_STEPS = [
 ];
 
 const FEATURES = [
-  { icon: <FaShieldAlt />, title: "Escrow Protection",    desc: "Stripe holds payment until delivery is confirmed — funds never released prematurely." },
+  { icon: <FaShieldAlt />, title: "Escrow Protection",    desc: "Stripe holds payment until delivery is confirmed. Funds never released prematurely." },
   { icon: <FaComments />,  title: "Real-time Chat",       desc: "Firebase-powered messaging linked to every order for fast, reliable communication." },
   { icon: <FaHandshake />, title: "Offer Negotiation",    desc: "Buyers and sellers can negotiate price before committing to an order." },
   { icon: <FaChartLine />, title: "Seller Analytics",     desc: "Track earnings, orders, and listing performance from one dashboard." },
   { icon: <FaBolt />,      title: "HypeMode Boost",       desc: "Premium listing placement and reduced platform fees for HypeMode subscribers." },
-  { icon: <FaCreditCard />, title: "Multi-Gateway Pay",   desc: "Accept payments via Stripe Connect or PayPal — seller's choice." },
+  { icon: <FaCreditCard />, title: "Multi-Gateway Pay",   desc: "Accept payments via Stripe Connect or PayPal, seller's choice." },
 ];
 
 export default function MarketplacePage() {
@@ -85,7 +85,7 @@ export default function MarketplacePage() {
             The Independent Film & Script Marketplace
           </h1>
           <p style={{ margin: "0 0 8px", fontSize: 17, color: "rgba(255,255,255,0.9)", maxWidth: 580, marginInline: "auto", lineHeight: 1.6 }}>
-            Buy, sell, and license independent films, scripts, and adaptation rights — directly between creators and buyers, protected by Stripe escrow.
+            Buy, sell, and license independent films, scripts, and adaptation rights, directly between creators and buyers, protected by Stripe escrow.
           </p>
           <p style={{ margin: "0 0 32px", fontSize: 14, color: "rgba(255,255,255,0.75)" }}>Free to join. 15% platform fee on sales only.</p>
 
@@ -218,7 +218,7 @@ export default function MarketplacePage() {
             Ready to buy or sell video content?
           </h2>
           <p style={{ margin: "0 0 28px", fontSize: 15, color: "rgba(255,255,255,0.85)", maxWidth: 520, marginInline: "auto" }}>
-            Create a free account today. No subscription required to browse — sellers only pay when they make a sale.
+            Create a free account today. No subscription required to browse. Sellers only pay when they make a sale.
           </p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
             <Link

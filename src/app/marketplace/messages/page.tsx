@@ -199,8 +199,8 @@ const Messages: React.FC = () => {
   // Update document title with unread count
   useEffect(() => {
     document.title = totalUnread > 0
-      ? `(${totalUnread}) Messages — Marketplace`
-      : 'Messages — Marketplace';
+      ? `(${totalUnread}) Messages | Marketplace`
+      : 'Messages | Marketplace';
     return () => { document.title = 'Wecinema'; };
   }, [totalUnread]);
 

@@ -83,7 +83,7 @@ export function centsToDollarsInput(cents: number): string {
 // ─── Labels ──────────────────────────────────────────────────
 
 function lookup(options: DealOption[], value: string | undefined, short = false): string {
-  if (!value) return "—";
+  if (!value) return "-";
   const opt = options.find((o) => o.value === value);
   if (!opt) return value.replace(/_/g, " ");
   return short ? opt.short ?? opt.label : opt.label;
@@ -97,7 +97,7 @@ export const paymentTypeLabel  = (v?: string, short = false) => lookup(PAYMENT_T
 export const deliveryLabel     = (v?: string) => lookup(DELIVERY_MATERIALS, v);
 
 export function termLabel(months: number | null | undefined): string {
-  if (months == null) return "—";
+  if (months == null) return "-";
   if (months === 0) return "Perpetual";
   return `${months} month${months === 1 ? "" : "s"}`;
 }
@@ -180,7 +180,7 @@ export function lastActivityText(
   switch (deal.status) {
     case "completed": return "Agreement finalized";
     case "paid":      return "Payment secured in escrow";
-    case "accepted":  return "Offer accepted — awaiting payment";
+    case "accepted":  return "Offer accepted, awaiting payment";
     case "declined":  return "Deal declined";
     case "cancelled": return "Deal withdrawn";
     case "expired":   return "Deal expired";
@@ -197,9 +197,9 @@ export function lastActivityText(
 
 /** "Jun 30, 2024 • 3:22 PM" */
 export function formatDealDate(iso: string | null | undefined): string {
-  if (!iso) return "—";
+  if (!iso) return "-";
   const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return "—";
+  if (Number.isNaN(d.getTime())) return "-";
   const date = d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
   const time = d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
   return `${date} • ${time}`;

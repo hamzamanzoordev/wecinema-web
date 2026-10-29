@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { OG, SITE_ORIGIN } from "@/lib/seo";
 
-const TITLE = "My Rentals — Films You've Rented | WeCinema";
+const TITLE = "My Rentals: Films You've Rented | WeCinema";
 const DESCRIPTION =
   "Your rented independent films on WeCinema. Rent a film from any creator and watch it for the length of the rental window.";
 

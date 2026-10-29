@@ -189,7 +189,7 @@ export function HistoryClient({ userId }: HistoryClientProps) {
       {authUser && isOwner && !loading && error && <EmptyState icon="⚠️" label={error} />}
 
       {authUser && isOwner && !loading && !error && history.length === 0 && (
-        <EmptyState icon="📜" label="No watch history yet — start watching videos!" />
+        <EmptyState icon="📜" label="No watch history yet. Start watching videos!" />
       )}
 
       {authUser && isOwner && !loading && !error && history.length > 0 && (

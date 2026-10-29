@@ -6,7 +6,7 @@ import { OG, SITE_ORIGIN } from "@/lib/seo";
 import { ExploreContent } from "@/app/explore/ExploreContent";
 
 const SITE = SITE_ORIGIN;
-const TITLE = "Pricing — WeCinema Plans for Creators & Buyers";
+const TITLE = "Pricing: WeCinema Plans for Creators & Buyers";
 const DESCRIPTION =
   "WeCinema pricing: free to watch and browse. Basic is $5/month and Pro is $10/month to buy, sell and list films and scripts. Sellers pay a 15% fee on sales only.";
 
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
 const FAQS = [
   {
     q: "How much does WeCinema cost?",
-    a: "Watching and browsing WeCinema is free. Paid plans are $5/month (Basic) and $10/month (Pro). Selling costs nothing up front — WeCinema takes a 15% fee on a sale only when it completes.",
+    a: "Watching and browsing WeCinema is free. Paid plans are $5/month (Basic) and $10/month (Pro). Selling costs nothing up front. WeCinema takes a 15% fee on a sale only when it completes.",
   },
   {
     q: "What is the difference between the Basic and Pro plans?",
@@ -54,7 +54,7 @@ const FAQS = [
   },
   {
     q: "Do I need a subscription to sell on WeCinema?",
-    a: "You need a paid plan to list on the marketplace. There is no listing fee and no up-front cost beyond the subscription — WeCinema earns its 15% only when your work sells.",
+    a: "You need a paid plan to list on the marketplace. There is no listing fee and no up-front cost beyond the subscription. WeCinema earns its 15% only when your work sells.",
   },
   {
     q: "How do sellers get paid?",
@@ -62,7 +62,7 @@ const FAQS = [
   },
   {
     q: "Can I cancel at any time?",
-    a: "Yes. Plans are month to month and you can cancel whenever you like — your listings and uploads stay in your account.",
+    a: "Yes. Plans are month to month and you can cancel whenever you like. Your listings and uploads stay in your account.",
   },
 ];
 
@@ -110,7 +110,7 @@ export default function PricingPage() {
       />
       <ExploreContent appUrl={clientEnv.NEXT_PUBLIC_APP_URL} />
       <div style={{ maxWidth: 960, margin: "0 auto", padding: "0 24px 56px" }}>
-        <CollectionFaq heading="Pricing — FAQ" faqs={FAQS} />
+        <CollectionFaq heading="Pricing: FAQ" faqs={FAQS} />
       </div>
     </>
   );

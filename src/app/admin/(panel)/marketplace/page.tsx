@@ -258,7 +258,7 @@ export default function MarketplacePage() {
                       <p className="text-[10px] text-[var(--ap-text-3)] font-mono">{new Date(listing.createdAt).toLocaleDateString()}</p>
                     </td>
                     <td className="px-4 py-3">
-                      <p className="text-sm text-[var(--ap-text-2)]">{(listing.seller as { username?: string })?.username ?? "—"}</p>
+                      <p className="text-sm text-[var(--ap-text-2)]">{(listing.seller as { username?: string })?.username ?? "-"}</p>
                     </td>
                     <td className="px-4 py-3">
                       <span className="text-xs font-mono text-[var(--ap-text-2)]">{TYPE_LABELS[listing.type] ?? listing.type}</span>
@@ -266,7 +266,7 @@ export default function MarketplacePage() {
                     <td className="px-4 py-3">
                       {listing.price != null ? (
                         <span className="text-sm font-bold text-emerald-400 font-mono">${listing.price}</span>
-                      ) : <span className="text-[var(--ap-text-3)] text-xs">—</span>}
+                      ) : <span className="text-[var(--ap-text-3)] text-xs">-</span>}
                     </td>
                     <td className="px-4 py-3">
                       <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-mono font-medium border ${STATUS_COLORS[listing.status] ?? "border-gray-500/30 text-gray-400"}`}>
@@ -382,8 +382,8 @@ export default function MarketplacePage() {
                   { label: "Title", value: detailListing.title },
                   { label: "Type", value: TYPE_LABELS[detailListing.type] ?? detailListing.type },
                   { label: "Status", value: detailListing.status },
-                  { label: "Price", value: detailListing.price != null ? `$${detailListing.price}` : "—" },
-                  { label: "Seller", value: (detailListing.seller as { username?: string })?.username ?? "—" },
+                  { label: "Price", value: detailListing.price != null ? `$${detailListing.price}` : "-" },
+                  { label: "Seller", value: (detailListing.seller as { username?: string })?.username ?? "-" },
                   { label: "Created", value: new Date(detailListing.createdAt).toLocaleDateString() },
                   ...(detailListing.rejectionReason ? [{ label: "Rejection Reason", value: detailListing.rejectionReason }] : []),
                 ].map(({ label, value }) => (

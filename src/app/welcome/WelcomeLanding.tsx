@@ -210,12 +210,12 @@ const PILLARS = [
   {
     icon: <ShieldCheck size={22} />,
     title: "Escrow on every order",
-    desc: "Stripe holds funds until delivery is confirmed — buyers purchase with zero risk, sellers get paid for confirmed work.",
+    desc: "Stripe holds funds until delivery is confirmed. Buyers purchase with zero risk, sellers get paid for confirmed work.",
   },
   {
     icon: <Repeat size={22} />,
     title: "Four ways to monetize",
-    desc: "Sell finished films, license rights, sell adaptation rights, or take custom commissions — one platform, every model.",
+    desc: "Sell finished films, license rights, sell adaptation rights, or take custom commissions: one platform, every model.",
   },
   {
     icon: <Clapperboard size={22} />,
@@ -235,7 +235,7 @@ const STEPS = [
   {
     icon: <Upload size={20} />,
     title: "Upload & list",
-    desc: "Sellers upload films with descriptions, pricing, and requirements — free to list.",
+    desc: "Sellers upload films with descriptions, pricing, and requirements, free to list.",
   },
   {
     icon: <ShoppingBag size={20} />,
@@ -265,7 +265,7 @@ const CREATOR_TYPES = [
 
 const SECURITY = [
   { icon: <ShieldCheck size={20} />, title: "Escrow on every order", desc: "Stripe authorizes funds upfront and releases only after delivery is confirmed." },
-  { icon: <Lock size={20} />, title: "Bank-grade encryption", desc: "Shipping details are AES-256 encrypted; passwords hashed with Argon2 — never stored in plaintext." },
+  { icon: <Lock size={20} />, title: "Bank-grade encryption", desc: "Shipping details are AES-256 encrypted; passwords hashed with Argon2, never stored in plaintext." },
   { icon: <KeyRound size={20} />, title: "Secure sign-in", desc: "Email OTP verification and Google sign-in, with short-lived tokens and instant revocation." },
   { icon: <BadgeCheck size={20} />, title: "Verified creators", desc: "Seller ratings, reviews, and verified badges so buyers always know who they're working with." },
 ];
@@ -277,11 +277,11 @@ const FAQS = [
   },
   {
     q: "How are payments protected?",
-    a: "Every order is protected by Stripe escrow. Funds are authorized when the order is placed and only released to the seller after the buyer confirms delivery — so funds are never released prematurely.",
+    a: "Every order is protected by Stripe escrow. Funds are authorized when the order is placed and only released to the seller after the buyer confirms delivery, so funds are never released prematurely.",
   },
   {
     q: "What can I sell?",
-    a: "Finished films and video content, commercial and broadcast licensing, adaptation rights for remakes and sequels, or custom commissions to a buyer's brief — four marketplace models in one place.",
+    a: "Finished films and video content, commercial and broadcast licensing, adaptation rights for remakes and sequels, or custom commissions to a buyer's brief: four marketplace models in one place.",
   },
   {
     q: "What is HypeMode?",
@@ -289,7 +289,7 @@ const FAQS = [
   },
   {
     q: "Who is WeCinema for?",
-    a: "Independent filmmakers, scriptwriters, actors, studios, and AI creators who want to monetize their work — and the production companies, studios, and filmmakers looking to source films, scripts, licensing, or custom video.",
+    a: "Independent filmmakers, scriptwriters, actors, studios, and AI creators who want to monetize their work, and the production companies, studios, and filmmakers looking to source films, scripts, licensing, or custom video.",
   },
 ];
 
@@ -516,7 +516,7 @@ export default function WelcomeLanding() {
               className="mx-auto max-w-[640px] mt-6 text-[16px] sm:text-[18px] leading-relaxed"
               style={{ color: heroSub }}
             >
-              Upload films, sell scripts, license rights, and network with filmmakers —
+              Upload films, sell scripts, license rights, and network with filmmakers, and
               turn your creativity into currency, protected by Stripe escrow on every order.
             </motion.p>
 
@@ -632,7 +632,7 @@ export default function WelcomeLanding() {
           <SectionHead
             eyebrow="Why WeCinema"
             title="A marketplace built for film"
-            sub="Direct relationships between creators and audiences — no gatekeepers, no surprises."
+            sub="Direct relationships between creators and audiences: no gatekeepers, no surprises."
           />
           <motion.div
             variants={stagger}
@@ -700,13 +700,13 @@ export default function WelcomeLanding() {
               An AI assistant built for film
             </h2>
             <p className="mt-4 text-[15px] leading-relaxed text-text-secondary max-w-[520px]">
-              Available 24/7 to help with uploads, marketplace, HypeMode, and payments — and to spark
+              Available 24/7 to help with uploads, marketplace, HypeMode, and payments, and to spark
               your next story with script ideas, character development, and filmmaking inspiration.
             </p>
             <ul className="mt-6 space-y-3">
               {[
                 "Get started guidance for uploads and listings",
-                "Creative help — script ideas & story development",
+                "Creative help: script ideas & story development",
                 "Answers on payments, escrow, and HypeMode",
               ].map((t) => (
                 <li key={t} className="flex items-start gap-2.5 text-[14px] text-text-secondary">
@@ -733,7 +733,7 @@ export default function WelcomeLanding() {
                 <div>
                   <div className="text-[14px] font-bold text-text-primary" style={{ fontFamily: "var(--font-heading)" }}>WeCinema AI</div>
                   <div className="text-[12px] text-text-tertiary flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: "var(--color-success)" }} /> Online — built for film
+                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: "var(--color-success)" }} /> Online: built for film
                   </div>
                 </div>
               </div>
@@ -743,7 +743,7 @@ export default function WelcomeLanding() {
                 </div>
                 <div className="max-w-[88%] px-4 py-2.5 rounded-2xl rounded-tl-sm text-[13.5px] leading-relaxed bg-bg-tertiary text-text-secondary">
                   Upload it for free, set your price, and choose a listing type. Buyers pay into Stripe
-                  escrow — you get paid the moment delivery is confirmed. Want help writing the listing?
+                  escrow. You get paid the moment delivery is confirmed. Want help writing the listing?
                 </div>
                 <div className="max-w-[60%] ml-auto px-4 py-2.5 rounded-2xl rounded-tr-sm text-[13.5px] font-medium" style={{ backgroundColor: GOLD, color: "#1A1300" }}>
                   Yes, please!
@@ -766,7 +766,7 @@ export default function WelcomeLanding() {
           <SectionHead
             eyebrow="Simple by design"
             title="How it works"
-            sub="From upload to payout — streamlined and protected at every step."
+            sub="From upload to payout: streamlined and protected at every step."
           />
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 relative">
             {STEPS.map((s, i) => (
@@ -797,7 +797,7 @@ export default function WelcomeLanding() {
           <SectionHead
             eyebrow="For every kind of creator"
             title="Built for the whole industry"
-            sub="Actors, studios, filmmakers, writers and AI creators — pick up to three profile tags and show the world what you do."
+            sub="Actors, studios, filmmakers, writers and AI creators. Pick up to three profile tags and show the world what you do."
           />
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-5">
             {CREATOR_TYPES.map((c, i) => (
@@ -831,7 +831,7 @@ export default function WelcomeLanding() {
               </h3>
               <ul className="space-y-3 mb-7">
                 {[
-                  "List for free — pay only when a sale completes",
+                  "List for free, pay only when a sale completes",
                   "4K uploads with automatic adaptive streaming",
                   "Negotiate offers directly with buyers, no middlemen",
                   "Get paid securely through Stripe or PayPal",
@@ -862,9 +862,9 @@ export default function WelcomeLanding() {
               </h3>
               <ul className="space-y-3 mb-7">
                 {[
-                  "Browse free — no subscription required",
+                  "Browse free, no subscription required",
                   "Buy, license, adapt, or commission original work",
-                  "Escrow protection — funds release only on delivery",
+                  "Escrow protection: funds release only on delivery",
                   "Real-time chat with creators on every order",
                 ].map((t) => (
                   <li key={t} className="flex items-start gap-2.5 text-[14px] text-text-secondary">
@@ -889,7 +889,7 @@ export default function WelcomeLanding() {
           <SectionHead
             eyebrow="Trust & safety"
             title="Secure by default, end to end"
-            sub="Every transaction, sign-in, and message is protected — so you can focus on the work."
+            sub="Every transaction, sign-in, and message is protected, so you can focus on the work."
           />
           <div className="grid gap-5 sm:gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {SECURITY.map((s, i) => (
@@ -982,7 +982,7 @@ export default function WelcomeLanding() {
             </h2>
             <p className="mt-4 max-w-[560px] mx-auto text-[15px] sm:text-[16px] leading-relaxed" style={{ color: "rgba(26,19,0,0.78)" }}>
               Create a free account and start uploading films, selling scripts, and building your
-              filmmaking career today. No fees to list — only on sales.
+              filmmaking career today. No fees to list, only on sales.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-3 mt-9">
               <Link

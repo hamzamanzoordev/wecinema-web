@@ -10,7 +10,7 @@ import { OG, SITE_ORIGIN } from "@/lib/seo";
 export const revalidate = 300;
 
 const SITE = SITE_ORIGIN;
-const TITLE = "Explore Independent Films — Browse the Full Catalog | WeCinema";
+const TITLE = "Explore Independent Films: Browse the Full Catalog | WeCinema";
 const DESCRIPTION =
   "Browse every independent film on WeCinema. Discover indie movies and short films by genre, theme and rating, from new and established filmmakers.";
 
@@ -39,11 +39,11 @@ export const metadata: Metadata = {
 const FAQS = [
   {
     q: "What can I watch on WeCinema?",
-    a: "WeCinema hosts independent films and short films uploaded directly by their filmmakers — features, shorts and documentaries across nine genres. Browsing and watching are free; some titles are offered as paid rentals or for sale by the creator.",
+    a: "WeCinema hosts independent films and short films uploaded directly by their filmmakers: features, shorts and documentaries across nine genres. Browsing and watching are free; some titles are offered as paid rentals or for sale by the creator.",
   },
   {
     q: "How do I find films by genre or theme?",
-    a: "Use the genre links for categories like horror, drama and documentary, or browse by theme — love, redemption, survival, revenge and more — to find films by what they are actually about rather than how they are marketed.",
+    a: "Use the genre links for categories like horror, drama and documentary, or browse by theme (love, redemption, survival, revenge and more) to find films by what they are actually about rather than how they are marketed.",
   },
   {
     q: "Are the films on WeCinema free to watch?",
@@ -145,7 +145,7 @@ export default async function ExplorePage() {
               color: "var(--color-text-secondary)",
             }}
           >
-            Every independent film on WeCinema, newest first — uploaded directly by the
+            Every independent film on WeCinema, newest first, uploaded directly by the
             filmmakers who made them. Browse the full catalog below, or narrow it down by
             genre, theme or rating.
           </p>
@@ -184,7 +184,7 @@ export default async function ExplorePage() {
           <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
             {RATINGS.map((r) => (
               <Link key={r} href={`/ratings/${r}`} style={pill} className="hover:!border-[var(--color-accent-primary)]">
-                {r} — {RATING_META[r]?.label ?? r}
+                {r}: {RATING_META[r]?.label ?? r}
               </Link>
             ))}
           </div>
@@ -195,7 +195,7 @@ export default async function ExplorePage() {
         </h2>
         <VideoGrid videos={videos} emptyMessage="No films in the catalog yet." />
 
-        <CollectionFaq heading="Exploring WeCinema — FAQ" faqs={FAQS} />
+        <CollectionFaq heading="Exploring WeCinema: FAQ" faqs={FAQS} />
 
         <nav aria-label="More on WeCinema" style={{ marginTop: 40 }}>
           <h2 style={{ fontSize: 16, fontWeight: 700, margin: "0 0 12px", color: "var(--color-text-primary)" }}>

@@ -252,7 +252,7 @@ export function TagsInput({
               ? `Tag limit reached (${MAX_TAGS})`
               : value.length
                 ? "Add another…"
-                : "Add tags — try #horror, #shortfilm, found footage"
+                : "Add tags, try #horror, #shortfilm, found footage"
           }
           aria-label="Tags"
           style={{

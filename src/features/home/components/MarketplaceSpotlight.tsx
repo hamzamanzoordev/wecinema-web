@@ -104,7 +104,7 @@ export function MarketplaceSpotlight({ listings }: { listings: Listing[] }) {
           eyebrow="Marketplace"
           title="Sell your film on WeCinema"
           titleId="mp-spotlight-heading"
-          subtitle="Upload your film, set your price, and earn directly from buyers worldwide — with escrow-protected payments."
+          subtitle="Upload your film, set your price, and earn directly from buyers worldwide, with escrow-protected payments."
         />
 
         <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: listings.length > 0 ? 28 : 0 }}>

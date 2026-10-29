@@ -359,7 +359,7 @@ const EditListingModal: React.FC<EditListingModalProps> = ({
                       />
                     </label>
                   )}
-                  <p className="mt-1 text-xs text-text-tertiary">Images &amp; videos — up to {MAX_FILES} files. Uploading new files replaces existing media.</p>
+                  <p className="mt-1 text-xs text-text-tertiary">Images &amp; videos, up to {MAX_FILES} files. Uploading new files replaces existing media.</p>
                 </div>
               </div>
           </div>

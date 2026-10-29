@@ -26,7 +26,7 @@ export function TestModeBanner() {
         pointerEvents: "none",
       }}
     >
-      TEST MODE — payments are fake, no real money
+      TEST MODE: payments are fake, no real money
     </div>
   );
 }

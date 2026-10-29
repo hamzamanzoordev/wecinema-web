@@ -450,7 +450,7 @@ export function HypemodeContent({ videos, appUrl: _appUrl }: HypemodeContentProp
               }}
             >
               <FaCrown size={12} />
-              Free trial — {trialDaysLeft(authUser.trialEndsAt)} day{trialDaysLeft(authUser.trialEndsAt) !== 1 ? "s" : ""} left
+              Free trial: {trialDaysLeft(authUser.trialEndsAt)} day{trialDaysLeft(authUser.trialEndsAt) !== 1 ? "s" : ""} left
               <Link href="/pricing" style={{ color: "#F59E0B", textDecoration: "underline", fontWeight: 700 }}>
                 Manage
               </Link>

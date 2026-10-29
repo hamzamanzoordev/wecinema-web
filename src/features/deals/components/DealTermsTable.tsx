@@ -20,7 +20,7 @@ export function DealTermsTable({ terms, listingId }: { terms: DealTerms; listing
     ["Exclusivity", exclusivityLabel(terms.exclusivity)],
     ["Payment Type", paymentTypeLabel(terms.paymentType)],
     ["Delivery Materials", deliveryLabel(terms.deliveryMaterials)],
-    ["Additional Notes", terms.notes?.trim() || "—"],
+    ["Additional Notes", terms.notes?.trim() || "-"],
   ];
 
   return (

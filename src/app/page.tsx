@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     title: HOME_TITLE,
     description: HOME_DESCRIPTION,
     url: SITE_ORIGIN,
-    images: [{ url: OG.default, width: 1200, height: 630, alt: "WeCinema — Independent Film Platform" }],
+    images: [{ url: OG.default, width: 1200, height: 630, alt: "WeCinema: Independent Film Platform" }],
     locale: "en_US",
   },
   twitter: {

@@ -140,7 +140,7 @@ export default function PrivacyPolicyPage() {
 
           <div className="px-8 py-8">
             <InfoBox variant="warning">
-              <strong>IMPORTANT:</strong> By using WeCinema — including browsing, uploading content, buying, selling, or interacting with any feature — you acknowledge that you have read and understood this Privacy Policy.
+              <strong>IMPORTANT:</strong> By using WeCinema, including browsing, uploading content, buying, selling, or interacting with any feature, you acknowledge that you have read and understood this Privacy Policy.
             </InfoBox>
 
             {/* Table of Contents */}
@@ -158,7 +158,7 @@ export default function PrivacyPolicyPage() {
             {/* ── 1 ── */}
             <Section id="overview" title="1. Overview & Scope">
               <P>
-                WeCinema (&quot;we,&quot; &quot;our,&quot; or &quot;the Platform&quot;) operates <strong>wecinema.co</strong> — an independent film platform for watching, uploading, distributing, and selling video content and scripts. This Privacy Policy applies to all users, including:
+                WeCinema (&quot;we,&quot; &quot;our,&quot; or &quot;the Platform&quot;) operates <strong>wecinema.co</strong>, an independent film platform for watching, uploading, distributing, and selling video content and scripts. This Privacy Policy applies to all users, including:
               </P>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4">
                 {[
@@ -180,12 +180,12 @@ export default function PrivacyPolicyPage() {
               <h3 className="text-[14.5px] font-semibold text-text-primary mt-1 mb-3">2.1 Information You Provide Directly</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {[
-                  { t: "Account Details",       d: "Username, email address, password (stored as Argon2 hash — never plaintext), profile picture, bio, and profile tags.",               accent: false },
+                  { t: "Account Details",       d: "Username, email address, password (stored as Argon2 hash, never plaintext), profile picture, bio, and profile tags.",               accent: false },
                   { t: "Payment Information",   d: "Billing details are processed exclusively by Stripe. WeCinema never stores raw card numbers or CVV data.",                          accent: true  },
                   { t: "Content & Metadata",    d: "Video files, thumbnails, scripts, listing titles, descriptions, pricing, tags, and associated usage-rights information.",          accent: false },
                   { t: "Shipping Addresses",    d: "For physical-goods orders, shipping addresses are stored AES-256-CBC encrypted using a platform-managed key.",                     accent: false },
                   { t: "Communications",        d: "Messages sent via our marketplace chat (stored in Firebase Firestore), support requests, and report submissions.",                 accent: false },
-                  { t: "Identity Verification", d: "For Stripe Connect seller onboarding, Stripe may collect government ID and bank details directly — we do not see these.",         accent: false },
+                  { t: "Identity Verification", d: "For Stripe Connect seller onboarding, Stripe may collect government ID and bank details directly. We do not see these.",         accent: false },
                 ].map((c) => (
                   <div
                     key={c.t}
@@ -209,8 +209,8 @@ export default function PrivacyPolicyPage() {
                 {[
                   ["IP Address & Device Info",    "Browser type, operating system, screen resolution, device identifiers."],
                   ["Log Data",                    "Pages visited, features used, timestamps, referring URLs, error logs."],
-                  ["Video Playback Telemetry",    "Watch duration, buffering events, quality selection — used to improve streaming."],
-                  ["Cookies & Local Storage",     "A secure sign-in cookie, your cookie choices and your preferences. Optional cookies only with your consent — see Section 8."],
+                  ["Video Playback Telemetry",    "Watch duration, buffering events, quality selection, used to improve streaming."],
+                  ["Cookies & Local Storage",     "A secure sign-in cookie, your cookie choices and your preferences. Optional cookies only with your consent. See Section 8."],
                   ["Analytics",                   "Usage and page-speed measurement through Google Analytics, only if you allow analytics cookies."],
                 ].map(([label, detail]) => (
                   <Li key={label}>
@@ -313,7 +313,7 @@ export default function PrivacyPolicyPage() {
                   },
                   {
                     name: "Meta Platforms",
-                    role: "Ad Measurement — Meta Pixel (only with your consent)",
+                    role: "Ad Measurement: Meta Pixel (only with your consent)",
                     data: "Public pages visited and a browser identifier, used to measure our Facebook and Instagram ads.",
                     link: "www.facebook.com/privacy/policy",
                   },
@@ -333,7 +333,7 @@ export default function PrivacyPolicyPage() {
               <h3 className="text-[14.5px] font-semibold text-text-primary mt-5 mb-2">Other Disclosure Scenarios</h3>
               <Ul>
                 <Li><strong>Legal Requirements:</strong> Court orders, subpoenas, governmental requests, or prevention of harm.</Li>
-                <Li><strong>Business Transfers:</strong> Merger, acquisition, or asset sale — we will notify affected users.</Li>
+                <Li><strong>Business Transfers:</strong> Merger, acquisition, or asset sale. We will notify affected users.</Li>
                 <Li><strong>Marketplace Visibility:</strong> Your public profile (username, avatar, listings) is visible to other users. Transaction summaries (not payment data) are shared between buyer and seller in an order.</Li>
               </Ul>
 
@@ -347,14 +347,14 @@ export default function PrivacyPolicyPage() {
               <P>WeCinema implements industry-standard technical and organisational security measures:</P>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
                 {[
-                  { icon: "🔐", title: "Password Hashing",       desc: "All passwords are hashed using Argon2id — the current OWASP-recommended algorithm. Plaintext passwords are never stored." },
-                  { icon: "🔑", title: "JWT Authentication",     desc: "Access tokens expire in 15 minutes and are kept in memory only. Refresh tokens (30 days, rotated on every use) live in a __Host- prefixed, httpOnly, Secure, SameSite cookie — inaccessible to JavaScript." },
+                  { icon: "🔐", title: "Password Hashing",       desc: "All passwords are hashed using Argon2id, the current OWASP-recommended algorithm. Plaintext passwords are never stored." },
+                  { icon: "🔑", title: "JWT Authentication",     desc: "Access tokens expire in 15 minutes and are kept in memory only. Refresh tokens (30 days, rotated on every use) live in a __Host- prefixed, httpOnly, Secure, SameSite cookie, inaccessible to JavaScript." },
                   { icon: "🛡️", title: "Transport Encryption",   desc: "All traffic between your browser and our servers is encrypted with TLS 1.2+. HSTS is enforced." },
                   { icon: "📦", title: "Storage Encryption",     desc: "Shipping addresses: AES-256-CBC. AWS S3 objects: server-side encryption (SSE-S3). Video delivery via short-lived presigned URLs (24-hour TTL)." },
                   { icon: "🚫", title: "Input Sanitisation",     desc: "All user input is validated and sanitised. MongoDB operators are stripped. Prototype pollution is actively blocked via middleware." },
-                  { icon: "⏱️", title: "Rate Limiting",          desc: "Authentication endpoints: 15 req/min. Payment endpoints: 5 req/min. Write operations: 10 req/30 min — mitigating brute-force attacks." },
+                  { icon: "⏱️", title: "Rate Limiting",          desc: "Authentication endpoints: 15 req/min. Payment endpoints: 5 req/min. Write operations: 10 req/30 min, mitigating brute-force attacks." },
                   { icon: "🔒", title: "Token Revocation",       desc: "Logout immediately blacklists the token's JTI. Incrementing tokenVersion globally revokes all active sessions for a user." },
-                  { icon: "💳", title: "PCI-DSS Compliance",    desc: "Payments are fully delegated to Stripe — a PCI-DSS Level 1 certified processor. WeCinema never touches raw card data." },
+                  { icon: "💳", title: "PCI-DSS Compliance",    desc: "Payments are fully delegated to Stripe, a PCI-DSS Level 1 certified processor. WeCinema never touches raw card data." },
                 ].map((item) => (
                   <div key={item.title} className="p-4 rounded-xl bg-bg-secondary border border-border-secondary">
                     <div className="flex items-center gap-2 mb-2">
@@ -391,7 +391,7 @@ export default function PrivacyPolicyPage() {
                       ["Marketplace chat logs",         "2 years",                  "Dispute resolution"],
                       ["Video content",                 "Until creator deletes",    "Content hosting agreement"],
                       ["Security & access logs",        "12 months",                "Security monitoring"],
-                      ["OTP codes",                     "10 minutes",               "One-time use — auto-expired"],
+                      ["OTP codes",                     "10 minutes",               "One-time use, auto-expired"],
                       ["JWT refresh tokens",            "30 days",                  "Authentication lifecycle"],
                       ["Cookie consent records",        "3 years",                  "Proof of consent (GDPR)"],
                     ].map(([type, period, reason]) => (
@@ -428,7 +428,7 @@ export default function PrivacyPolicyPage() {
                 ))}
               </div>
               <P>To exercise any of these rights, email <strong>privacy@wecinema.co</strong> with your account email and the specific request. We will respond within 30 days (or 72 hours for urgent security concerns).</P>
-              <P>You may also delete your account directly from your account settings — this triggers immediate deactivation and schedules all associated data for deletion within 90 days.</P>
+              <P>You may also delete your account directly from your account settings. This triggers immediate deactivation and schedules all associated data for deletion within 90 days.</P>
             </Section>
 
             {/* ── 8 ── */}
@@ -440,7 +440,7 @@ export default function PrivacyPolicyPage() {
                     type: "Strictly Necessary",
                     color: "var(--color-success)",
                     bg: "var(--color-success-bg)",
-                    desc: "Keep you signed in (a Secure, httpOnly refresh cookie), remember your cookie choices and the preferences you set yourself, such as light or dark mode, and let checkout work — Stripe and PayPal set fraud-prevention cookies when a payment form opens. Always on.",
+                    desc: "Keep you signed in (a Secure, httpOnly refresh cookie), remember your cookie choices and the preferences you set yourself, such as light or dark mode, and let checkout work. Stripe and PayPal set fraud-prevention cookies when a payment form opens. Always on.",
                   },
                   {
                     type: "Functional",
@@ -475,7 +475,7 @@ export default function PrivacyPolicyPage() {
 
             {/* ── 9 ── */}
             <Section id="transfers" title="9. International Data Transfers">
-              <P>WeCinema servers are operated by Amazon Web Services in the <strong>US East (Ohio — us-east-2)</strong> region. If you access the platform from outside the United States, your data is transferred to and processed in the United States.</P>
+              <P>WeCinema servers are operated by Amazon Web Services in the <strong>US East (Ohio, us-east-2)</strong> region. If you access the platform from outside the United States, your data is transferred to and processed in the United States.</P>
               <P>For users in the European Economic Area (EEA) or United Kingdom, such transfers are made under standard contractual clauses (SCCs) or other lawful transfer mechanisms recognised under applicable data protection law.</P>
               <P>By using WeCinema, you consent to this international transfer and processing of your personal data.</P>
             </Section>
@@ -495,9 +495,9 @@ export default function PrivacyPolicyPage() {
               <Ul>
                 {[
                   ["Contract",               "Processing necessary to provide you with platform services (account, orders, payments)."],
-                  ["Legitimate Interests",   "Fraud prevention, security monitoring, platform improvement — balanced against your rights."],
+                  ["Legitimate Interests",   "Fraud prevention, security monitoring, platform improvement, balanced against your rights."],
                   ["Legal Obligation",       "Financial record-keeping, responding to lawful requests from authorities."],
-                  ["Consent",                "Marketing emails, and analytics and marketing cookies — withdrawable at any time from Cookie settings."],
+                  ["Consent",                "Marketing emails, and analytics and marketing cookies, withdrawable at any time from Cookie settings."],
                 ].map(([basis, detail]) => (
                   <Li key={basis}><strong>{basis}:</strong> {detail}</Li>
                 ))}
@@ -511,7 +511,7 @@ export default function PrivacyPolicyPage() {
               <Ul>
                 <Li><strong>Know:</strong> What personal information is collected, used, shared, or sold.</Li>
                 <Li><strong>Delete:</strong> Request deletion of personal information we hold about you.</Li>
-                <Li><strong>Opt-Out of Sale:</strong> WeCinema does not sell personal information — this right is automatically satisfied.</Li>
+                <Li><strong>Opt-Out of Sale:</strong> WeCinema does not sell personal information. This right is automatically satisfied.</Li>
                 <Li><strong>Non-Discrimination:</strong> We will not discriminate against you for exercising any CCPA right.</Li>
               </Ul>
               <P>To submit a verifiable California consumer request, email privacy@wecinema.co with subject line "CCPA Request" from your registered account email. We will respond within 45 days.</P>

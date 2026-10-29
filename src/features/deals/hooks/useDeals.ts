@@ -48,7 +48,7 @@ export function dealErrorMessage(err: unknown, fallback: string): string {
     case "DEAL_EXISTS":         return "You already have an open deal on this listing.";
     case "PAYMENT_MISMATCH":
     case "PAYMENT_NOT_AUTHORIZED":
-      return "We couldn't verify that payment. No charge was captured — please try again.";
+      return "We couldn't verify that payment. No charge was captured. Please try again.";
   }
   if (err.status === 429) return "Too many requests. Please wait a moment and try again.";
   return err.message || fallback;
@@ -283,7 +283,7 @@ export function useDealPayment(dealId: string | undefined) {
       if (res.data.testMode) {
         // Test-payment account: no Stripe — confirm the fake payment straight away.
         await dealService.confirmDealPayment(dealId, res.data.paymentIntentId);
-        toast.success("Test payment complete — no real money was charged");
+        toast.success("Test payment complete. No real money was charged");
         return res.data;
       }
       setClientSecret(res.data.clientSecret);

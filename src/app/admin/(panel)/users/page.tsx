@@ -190,7 +190,7 @@ export default function UsersPage() {
                           </div>
                           <div className="min-w-0">
                             <p className="text-sm font-medium text-[var(--ap-text)] truncate">{user.username}</p>
-                            <p className="text-[10px] text-[var(--ap-text-3)] font-mono">{user.dob ? new Date(user.dob).toLocaleDateString() : "—"}</p>
+                            <p className="text-[10px] text-[var(--ap-text-3)] font-mono">{user.dob ? new Date(user.dob).toLocaleDateString() : "-"}</p>
                           </div>
                         </div>
                       </td>
@@ -209,7 +209,7 @@ export default function UsersPage() {
                         </button>
                       </td>
                       <td className="px-4 py-3 text-xs text-[var(--ap-text-3)] font-mono">
-                        {user.lastPayment ? new Date(user.lastPayment).toLocaleDateString() : "—"}
+                        {user.lastPayment ? new Date(user.lastPayment).toLocaleDateString() : "-"}
                       </td>
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-1.5">

@@ -264,7 +264,7 @@ export function ThumbnailPicker({
                 <span style={{ fontSize: 12, color: "var(--color-text-tertiary)" }}>
                   {scanning
                     ? `Scanning video… ${scan.candidates.length}/${CANDIDATE_COUNT}`
-                    : "Frames from across your video — tap one to use it."}
+                    : "Frames from across your video. Tap one to use it."}
                 </span>
                 {!scanning && scan.candidates.length > 0 && (
                   <button

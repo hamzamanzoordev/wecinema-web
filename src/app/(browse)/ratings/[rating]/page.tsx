@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const copy = getRatingCopy(rating);
 
   return {
-    title: `Rated ${rating} Films — Watch ${rating} Movies Online`,
+    title: `Rated ${rating} Films: Watch ${rating} Movies Online`,
     description: copy.description,
     keywords: copy.keywords,
     alternates: { canonical: `/ratings/${rating}` },
@@ -129,7 +129,7 @@ export default async function RatingPage({ params }: { params: Promise<Params> }
                     verticalAlign: "middle",
                   }}
                 >
-                  — {meta.label}
+                  · {meta.label}
                 </span>
               )}
             </h1>
@@ -155,7 +155,7 @@ export default async function RatingPage({ params }: { params: Promise<Params> }
 
         <VideoGrid videos={videos} emptyMessage={`No ${rating}-rated films yet.`} />
 
-        <CollectionFaq heading={`Rated ${rating} films — FAQ`} faqs={copy.faqs} />
+        <CollectionFaq heading={`Rated ${rating} films: FAQ`} faqs={copy.faqs} />
 
         <nav aria-label="Browse other content ratings" style={{ marginTop: 40 }}>
           <h2 style={{ fontSize: 16, fontWeight: 700, margin: "0 0 12px", color: "var(--color-text-primary)" }}>

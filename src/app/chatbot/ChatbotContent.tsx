@@ -183,7 +183,7 @@ export default function ChatbotContent() {
                 WeCinema AI Assistant
               </h2>
               <p className="text-[13px] text-text-tertiary max-w-[360px] leading-relaxed">
-                Ask me anything about WeCinema — uploads, marketplace, HypeMode, payments, or how to get started.
+                Ask me anything about WeCinema: uploads, marketplace, HypeMode, payments, or how to get started.
               </p>
               <div className="flex flex-wrap gap-2 justify-center mt-2">
                 {SUGGESTIONS.map((s) => (

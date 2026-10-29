@@ -6,7 +6,7 @@ import { OG, SITE_ORIGIN } from "@/lib/seo";
 
 export const revalidate = 300;
 
-const TITLE = "Shorts — Quick Independent Films | WeCinema";
+const TITLE = "Shorts: Quick Independent Films | WeCinema";
 const DESCRIPTION = "Watch short-form independent films and clips on WeCinema.";
 
 export const metadata: Metadata = {
@@ -29,7 +29,7 @@ export default async function ShortsPage() {
     <Suspense fallback={<div style={{ position: "fixed", inset: 0, background: "#000" }} />}>
       {/* The player fills the viewport, so the page's heading is visually
           hidden rather than absent — it had no <h1> at all. */}
-      <h1 className="sr-only">Short Films — Watch Independent Shorts on WeCinema</h1>
+      <h1 className="sr-only">Short Films: Watch Independent Shorts on WeCinema</h1>
       <ShortsPlayer videos={videos} />
     </Suspense>
   );

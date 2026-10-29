@@ -9,11 +9,11 @@ export const FAQS = [
   },
   {
     q: "How are payments protected?",
-    a: "Every order is protected by Stripe escrow. Funds are authorized when the order is placed and only released to the seller after the buyer confirms delivery — so funds are never released prematurely.",
+    a: "Every order is protected by Stripe escrow. Funds are authorized when the order is placed and only released to the seller after the buyer confirms delivery, so funds are never released prematurely.",
   },
   {
     q: "What can I sell?",
-    a: "Finished films and video content, commercial and broadcast licensing, adaptation rights for remakes and sequels, or custom commissions to a buyer's brief — four marketplace models in one place.",
+    a: "Finished films and video content, commercial and broadcast licensing, adaptation rights for remakes and sequels, or custom commissions to a buyer's brief: four marketplace models in one place.",
   },
   {
     q: "What is HypeMode?",
@@ -21,7 +21,7 @@ export const FAQS = [
   },
   {
     q: "Who is WeCinema for?",
-    a: "Independent filmmakers, scriptwriters, actors, studios, and AI creators who want to monetize their work — and the production companies and studios looking to source films, scripts, licensing, or custom video.",
+    a: "Independent filmmakers, scriptwriters, actors, studios, and AI creators who want to monetize their work, and the production companies and studios looking to source films, scripts, licensing, or custom video.",
   },
 ] as const;
 

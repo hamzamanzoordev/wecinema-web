@@ -32,7 +32,7 @@ const getStatusStyle = (status: string) => {
 
 const payoutMethodLabel = (method: string) => {
   const map: Record<string, string> = { stripe: "Stripe", bank_transfer: "Bank Transfer", bank: "Bank Transfer", paypal: "PayPal" };
-  return map[method?.toLowerCase()] ?? method ?? "—";
+  return map[method?.toLowerCase()] ?? method ?? "-";
 };
 
 const payoutMethodIcon = (method: string) => {
@@ -44,7 +44,7 @@ const payoutMethodIcon = (method: string) => {
 };
 
 const formatDate = (dateString?: string) => {
-  if (!dateString) return "—";
+  if (!dateString) return "-";
   try {
     return new Date(dateString).toLocaleDateString("en-US", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
   } catch {
@@ -337,7 +337,7 @@ const WithdrawTab: React.FC<WithdrawTabProps> = ({
                         {payoutMethodLabel(p.method)}
                       </td>
                       <td className="px-4 py-3 text-xs text-text-tertiary font-mono whitespace-nowrap">
-                        {p.payoutId?.slice(-8) ?? "—"}
+                        {p.payoutId?.slice(-8) ?? "-"}
                         {p.failureMessage && <p className="text-danger text-xs">{p.failureMessage}</p>}
                       </td>
                     </tr>

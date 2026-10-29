@@ -205,7 +205,7 @@ const OrderDetailsModal: React.FC<OrderDetailsModalProps> = ({
       toast.success(`${action.label} successful`);
       onOrderUpdate?.(orderId, action.targetStatus);
     } else {
-      toast.error(`${action.label} failed — please try again`);
+      toast.error(`${action.label} failed. Please try again`);
     }
     setPendingAction(null);
   }, [updateStatus, orderId, onOrderUpdate]);

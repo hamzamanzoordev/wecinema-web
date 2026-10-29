@@ -124,7 +124,7 @@ export class AppError extends Error {
 /** The session couldn't be renewed right now (offline, timeout, 429, 5xx). Not a logout. */
 export class SessionUnavailableError extends AppError {
   constructor() {
-    super(null, "Connection problem — check your internet and try again.", "SESSION_REFRESH_UNAVAILABLE");
+    super(null, "Connection problem. Check your internet and try again.", "SESSION_REFRESH_UNAVAILABLE");
     this.name = "SessionUnavailableError";
   }
 }

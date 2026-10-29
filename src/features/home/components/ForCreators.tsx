@@ -37,12 +37,12 @@ const PILLARS = [
   {
     icon: <ShieldCheck size={20} />,
     title: "Escrow on every order",
-    desc: "Stripe holds funds until delivery is confirmed — buyers purchase with zero risk, sellers get paid for confirmed work.",
+    desc: "Stripe holds funds until delivery is confirmed. Buyers purchase with zero risk, sellers get paid for confirmed work.",
   },
   {
     icon: <Repeat size={20} />,
     title: "Four ways to monetize",
-    desc: "Sell finished films, license rights, sell adaptation rights, or take custom commissions — every model, one platform.",
+    desc: "Sell finished films, license rights, sell adaptation rights, or take custom commissions: every model, one platform.",
   },
   {
     icon: <Clapperboard size={20} />,
@@ -88,7 +88,7 @@ export function ForCreators() {
         eyebrow="For Creators"
         title="Watch, create, and trade independent film"
         titleId="for-creators-heading"
-        subtitle="WeCinema brings streaming and a creator marketplace together — discover films from creators worldwide, and sell, license, or commission work with escrow-protected payments."
+        subtitle="WeCinema brings streaming and a creator marketplace together. Discover films from creators worldwide, and sell, license, or commission work with escrow-protected payments."
       />
 
       {/* How it works — three minimal steps */}

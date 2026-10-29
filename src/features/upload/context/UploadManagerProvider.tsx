@@ -157,7 +157,7 @@ export function UploadManagerProvider({ children }: { children: ReactNode }) {
     setDoneFlash(true);
     toast.success(
       <span>
-        <strong>{fileName}</strong> uploaded — ready to publish.{" "}
+        <strong>{fileName}</strong> uploaded, ready to publish.{" "}
         <Link href={`/upload/video/${draftId}`} style={{ color: "var(--color-accent-primary)", fontWeight: 600 }}>
           Edit details
         </Link>
@@ -369,7 +369,7 @@ export function UploadManagerProvider({ children }: { children: ReactNode }) {
     if (!anyActive) return;
     const onBeforeUnload = (e: BeforeUnloadEvent) => {
       e.preventDefault();
-      e.returnValue = "Upload in progress — it will resume when you come back.";
+      e.returnValue = "Upload in progress. It will resume when you come back.";
     };
     window.addEventListener("beforeunload", onBeforeUnload);
     return () => window.removeEventListener("beforeunload", onBeforeUnload);

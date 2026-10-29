@@ -53,7 +53,7 @@ const Resources: React.FC = () => {
           Seller Resources
         </h1>
         <p style={{ fontSize: 16, lineHeight: 1.65, color: "var(--color-text-secondary)", margin: "0 0 8px", maxWidth: 720 }}>
-          A curated hub for WeCinema creators — guides, tools, and tips to help you list, market, and sell
+          A curated hub for WeCinema creators: guides, tools, and tips to help you list, market, and sell
           your films and scripts to a worldwide audience.
         </p>
 

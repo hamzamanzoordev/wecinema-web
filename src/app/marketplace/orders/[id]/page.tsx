@@ -98,13 +98,13 @@ const STATUS_ACCENT: Record<string, string> = {
 };
 
 function fmtDate(d?: string) {
-  if (!d) return '—';
+  if (!d) return '-';
   try {
     return new Date(d).toLocaleDateString('en-US', {
       year: 'numeric', month: 'short', day: 'numeric',
       hour: '2-digit', minute: '2-digit',
     });
-  } catch { return '—'; }
+  } catch { return '-'; }
 }
 
 function fmtMoney(cents: number) {
@@ -582,7 +582,7 @@ const OrderDetails: React.FC = () => {
                                 value={deliveryMessage}
                                 onChange={e => setDeliveryMessage(e.target.value)}
                                 rows={4}
-                                placeholder="Describe what you've delivered — include any relevant links, notes, or access instructions…"
+                                placeholder="Describe what you've delivered. Include any relevant links, notes, or access instructions…"
                                 className="mp-textarea mb-3"
                               />
                               <button

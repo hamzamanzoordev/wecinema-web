@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: { absolute: "How to Sell Your Film or Script Online | WeCinema Guide" },
   description:
-    "Step-by-step guide to selling films, scripts, and rights online on WeCinema — how listings, offers, orders, escrow payouts, and platform fees work.",
+    "Step-by-step guide to selling films, scripts, and rights online on WeCinema: how listings, offers, orders, escrow payouts, and platform fees work.",
   alternates: { canonical: "/marketplace/guide" },
 };
 

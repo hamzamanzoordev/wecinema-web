@@ -1457,7 +1457,7 @@ export function UserProfileClient({ userId }: UserProfileClientProps) {
               )}
               {isOwner && videoView === "drafts" ? (
                 drafts === null ? null : drafts.length === 0 ? (
-                  <EmptyState icon="📝" label="No drafts — uploads you haven't published show up here" />
+                  <EmptyState icon="📝" label="No drafts. Uploads you haven't published show up here" />
                 ) : (
                   <DraftsGrid
                     drafts={drafts}

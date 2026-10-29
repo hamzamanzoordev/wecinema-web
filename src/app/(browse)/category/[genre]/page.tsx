@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const copy = getGenreCopy(genre);
 
   return {
-    title: `${label} Films — Watch Independent ${label} Movies Online`,
+    title: `${label} Films: Watch Independent ${label} Movies Online`,
     description: copy.description,
     keywords: copy.keywords,
     alternates: { canonical: `/category/${genre}` },
@@ -134,7 +134,7 @@ export default async function CategoryPage({ params }: { params: Promise<Params>
 
         <VideoGrid videos={videos} emptyMessage={`No ${label.toLowerCase()} films yet.`} />
 
-        <CollectionFaq heading={`${label} films — FAQ`} faqs={copy.faqs} />
+        <CollectionFaq heading={`${label} films: FAQ`} faqs={copy.faqs} />
 
         {/* Internal linking — pass authority across the genre cluster + aid discovery */}
         <nav aria-label="Browse other genres" style={{ marginTop: 40 }}>

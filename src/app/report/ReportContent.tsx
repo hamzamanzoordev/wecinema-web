@@ -21,7 +21,7 @@ const CATEGORIES = [
   { value: "adult",       label: "Adult / Sexual Content (Non-Consensual)",danger: true  },
   { value: "fraud",       label: "Fraud, Scam, or Impersonation",         danger: false },
   { value: "privacy",     label: "Privacy Violation (Doxxing / Stalking)", danger: false },
-  { value: "csam",        label: "Content Involving Minors — URGENT",     danger: true  },
+  { value: "csam",        label: "Content Involving Minors (URGENT)",     danger: true  },
   { value: "malware",     label: "Malware or Phishing Link",              danger: true  },
   { value: "other",       label: "Other",                                 danger: false },
 ] as const;
@@ -182,7 +182,7 @@ export default function ReportContent() {
           {isUrgent && form.category !== "csam" && (
             <div className="px-4 py-3 rounded-xl text-[13px] mb-4 border"
               style={{ backgroundColor: "var(--color-warning-bg)", borderColor: "var(--color-warning)", color: "var(--color-text-secondary)" }}>
-              <strong>High priority category</strong> — our moderation team reviews these reports within 24 hours.
+              <strong>High priority category</strong>: our moderation team reviews these reports within 24 hours.
             </div>
           )}
 
@@ -278,7 +278,7 @@ export default function ReportContent() {
             {/* Reporter email (optional) */}
             <div>
               <label htmlFor="reporter-email" className="block text-[12.5px] font-semibold text-text-secondary mb-1.5 uppercase tracking-wide">
-                Your Email <span className="text-text-tertiary font-normal">(optional — for follow-up)</span>
+                Your Email <span className="text-text-tertiary font-normal">(optional, for follow-up)</span>
               </label>
               <input
                 id="reporter-email"

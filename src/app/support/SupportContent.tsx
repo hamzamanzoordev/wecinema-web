@@ -72,7 +72,7 @@ export default function SupportContent() {
           </div>
           <h1 className="text-2xl font-bold text-text-primary mb-2" style={{ fontFamily: "var(--font-heading)" }}>How can we help?</h1>
           <p className="text-[15px] text-text-tertiary leading-relaxed max-w-[480px] mx-auto">
-            Browse FAQs below or reach out directly — we&apos;re here to help you get the most out of WeCinema.
+            Browse FAQs below or reach out directly. We&apos;re here to help you get the most out of WeCinema.
           </p>
         </div>
 

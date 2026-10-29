@@ -448,7 +448,7 @@ const Browse: React.FC = () => {
     return (
       <MarketplaceLayout
         title="Browse Independent Films & Scripts for Sale"
-        subtitle="Every active listing on the WeCinema marketplace — films, scripts, licensing and adaptation rights, sold directly by their creators."
+        subtitle="Every active listing on the WeCinema marketplace: films, scripts, licensing and adaptation rights, sold directly by their creators."
       >
         <div className="mp-loading-state" style={{ minHeight: "60vh" }}>
           <div className="mp-spinner" style={{ marginBottom: 20 }} />
@@ -462,7 +462,7 @@ const Browse: React.FC = () => {
   return (
     <MarketplaceLayout
       title="Browse Independent Films & Scripts for Sale"
-      subtitle="Every active listing on the WeCinema marketplace — films, scripts, licensing and adaptation rights, sold directly by their creators."
+      subtitle="Every active listing on the WeCinema marketplace: films, scripts, licensing and adaptation rights, sold directly by their creators."
     >
       <div style={{ minHeight: "100vh", backgroundColor: "var(--color-bg-secondary)" }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" style={{ paddingTop: 8, paddingBottom: 48 }}>

@@ -20,16 +20,16 @@ const GENRES = [
 
 const FORMAT_TIPS = [
   "Use standard screenplay format: scene headings, action, character names, dialogue.",
-  "Scene headings: INT./EXT. LOCATION — DAY/NIGHT",
+  "Scene headings: INT./EXT. LOCATION - DAY/NIGHT",
   "Character names are centered in ALL CAPS before their dialogue.",
-  "Action lines describe what we see — keep them tight and visual.",
+  "Action lines describe what we see: keep them tight and visual.",
   "Dialogue should reveal character, not exposition.",
 ];
 
 const STRUCTURE_TIPS = [
-  "Act 1 (pages 1–25): Setup — introduce world, protagonist, and inciting incident.",
-  "Act 2 (pages 25–85): Confrontation — rising stakes, midpoint, dark night of the soul.",
-  "Act 3 (pages 85–110): Resolution — climax, denouement.",
+  "Act 1 (pages 1–25): Setup (introduce world, protagonist, and inciting incident).",
+  "Act 2 (pages 25–85): Confrontation (rising stakes, midpoint, dark night of the soul).",
+  "Act 3 (pages 85–110): Resolution (climax, denouement).",
   "Aim for one page = one minute of screen time.",
   "Feature films: 90–120 pages. Short films: 5–15 pages.",
 ];
@@ -38,19 +38,19 @@ const MARKETPLACE_TIPS = [
   "Clear, professional formatting increases buyer confidence.",
   "Add a logline summary in the description for better discoverability.",
   "Genre tags connect your script to interested buyers and producers.",
-  "Buyers look for scripts with strong voice — let your style shine.",
+  "Buyers look for scripts with strong voice: let your style shine.",
 ];
 
 const PLACEHOLDER = `FADE IN:
 
-INT. LOCATION — DAY
+INT. LOCATION - DAY
 
 Describe the scene here. Keep action lines brief and visual.
 
 \t\t\t\tCHARACTER NAME
 \t\t\tDialogue goes here.
 
-EXT. ANOTHER LOCATION — NIGHT
+EXT. ANOTHER LOCATION - NIGHT
 
 The story continues...`;
 
@@ -75,7 +75,7 @@ export default function UploadScriptPage() {
     pageEst >= 85 && pageEst <= 120 ? "Feature length"
     : pageEst > 120 ? "Over feature length"
     : pageEst > 0 ? "Short / Mid-length"
-    : "—";
+    : "-";
 
   useEffect(() => {
     if (status === "unauthenticated") router.push("/login");
@@ -223,7 +223,7 @@ export default function UploadScriptPage() {
           </h3>
 
           <div style={{ marginTop: 16 }}>
-            <ReviewRow label="Genre">{genres.length ? genres.join(", ") : "—"}</ReviewRow>
+            <ReviewRow label="Genre">{genres.length ? genres.join(", ") : "-"}</ReviewRow>
             <ReviewRow label="Length">
               {wordCount.toLocaleString()} words · ~{pageEst} page{pageEst !== 1 ? "s" : ""} · {lengthLabel}
             </ReviewRow>
@@ -245,7 +245,7 @@ export default function UploadScriptPage() {
                   borderRadius: 10,
                 }}
               >
-                {content.trim().slice(0, 600) || "—"}
+                {content.trim().slice(0, 600) || "-"}
                 {content.trim().length > 600 ? "\n…" : ""}
               </pre>
             </ReviewRow>

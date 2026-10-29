@@ -143,8 +143,8 @@ function SaveIndicator({ state }: { state: SaveState }) {
     pending: { icon: <CircleDashed size={14} />, text: "Unsaved changes", color: "var(--color-text-tertiary)" },
     saving: { icon: <Loader2 size={14} className="animate-spin" />, text: "Saving…", color: "var(--color-text-tertiary)" },
     saved: { icon: <Cloud size={14} />, text: "All changes saved as draft", color: "var(--color-text-tertiary)" },
-    offline: { icon: <CloudOff size={14} />, text: "Offline — saved on this device", color: TONE_COLOR.waiting },
-    error: { icon: <AlertTriangle size={14} />, text: "Couldn't save — retrying", color: TONE_COLOR.error },
+    offline: { icon: <CloudOff size={14} />, text: "Offline: saved on this device", color: TONE_COLOR.waiting },
+    error: { icon: <AlertTriangle size={14} />, text: "Couldn't save, retrying", color: TONE_COLOR.error },
   };
   const entry = map[state];
   if (!entry) return null;
@@ -334,7 +334,7 @@ export function DraftEditor({ draftId }: { draftId: string }) {
       toast.error(
         err instanceof Error && navigator.onLine !== false
           ? `Couldn't save the thumbnail: ${err.message}`
-          : "You're offline — pick the thumbnail again when you're back online.",
+          : "You're offline. Pick the thumbnail again when you're back online.",
       );
     } finally {
       setThumbSaving(false);
@@ -360,7 +360,7 @@ export function DraftEditor({ draftId }: { draftId: string }) {
     if (draft?.upload.state === "failed") {
       return { tone: "error", pct: 0, text: "This upload expired. Delete the draft and upload the file again.", needsFile: false };
     }
-    return { tone: "waiting", pct: 0, text: "Upload interrupted — select the same file to resume", needsFile: true };
+    return { tone: "waiting", pct: 0, text: "Upload interrupted. Select the same file to resume", needsFile: true };
   }, [job, draft?.upload.state]);
 
   const handleReselect = async (file: File | undefined) => {
@@ -406,7 +406,7 @@ export function DraftEditor({ draftId }: { draftId: string }) {
       uploads.dismiss(draftId);
       if (result.rentalWarning) {
         toast.error(
-          result.rentalWarning.message ?? "Renting couldn't be enabled — connect payouts, then turn it on from your video.",
+          result.rentalWarning.message ?? "Renting couldn't be enabled. Connect payouts, then turn it on from your video.",
           { duration: 7000 },
         );
       }
@@ -420,8 +420,8 @@ export function DraftEditor({ draftId }: { draftId: string }) {
 
   const handleSaveDraft = async () => {
     const saved = await flush();
-    if (saved) toast.success(uploadDone ? "Draft saved" : "Draft saved — the upload keeps going in the background");
-    else toast("Saved on this device — it syncs when you're back online", { icon: "💾" });
+    if (saved) toast.success(uploadDone ? "Draft saved" : "Draft saved. The upload keeps going in the background");
+    else toast("Saved on this device. It syncs when you're back online", { icon: "💾" });
     router.push("/upload/video");
   };
 
@@ -593,7 +593,7 @@ export function DraftEditor({ draftId }: { draftId: string }) {
         >
           <AlertTriangle size={18} color={TONE_COLOR.waiting} aria-hidden />
           <p style={{ margin: 0, flex: 1, minWidth: 200, fontSize: 13, color: "var(--color-text-primary)" }}>
-            <strong>Session expired.</strong> Sign in to continue — your draft and upload are saved.
+            <strong>Session expired.</strong> Sign in to continue. Your draft and upload are saved.
           </p>
           <Link href={signInHref} style={{ fontSize: 13, fontWeight: 700, color: "var(--color-accent-primary)" }}>
             Sign in
@@ -671,7 +671,7 @@ export function DraftEditor({ draftId }: { draftId: string }) {
                         onChange={(e) => update("description", e.target.value)}
                         rows={5}
                         maxLength={5000}
-                        placeholder="Tell viewers about your video — what it's about, who made it, what inspired it"
+                        placeholder="Tell viewers about your video. What it's about, who made it, what inspired it"
                         style={{ ...inputStyle, resize: "vertical", fontFamily: "inherit", lineHeight: 1.6 }}
                       />
                     </div>
@@ -754,7 +754,7 @@ export function DraftEditor({ draftId }: { draftId: string }) {
                     </p>
                     <OptionToggle
                       label="HypeMode (Paid Content)"
-                      desc="Your video is gated — viewers pay to access it. Earns higher revenue share."
+                      desc="Your video is gated. Viewers pay to access it. Earns higher revenue share."
                       checked={values.hasPaid}
                       onChange={(v) => update("hasPaid", v)}
                     />
@@ -991,7 +991,7 @@ export function DraftEditor({ draftId }: { draftId: string }) {
 
             {!uploadDone && uploadView.tone !== "error" && (
               <p style={{ margin: 0, fontSize: 11.5, color: "var(--color-text-tertiary)", lineHeight: 1.5 }}>
-                You can leave this page — the upload keeps going and resumes by itself if your connection drops.
+                You can leave this page. The upload keeps going and resumes by itself if your connection drops.
               </p>
             )}
           </div>

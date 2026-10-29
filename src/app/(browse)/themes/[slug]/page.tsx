@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const copy = getThemeCopy(slug);
 
   return {
-    title: `${label} Films — Independent Movies About ${label}`,
+    title: `${label} Films: Independent Movies About ${label}`,
     description: copy.description,
     keywords: copy.keywords,
     alternates: { canonical: `/themes/${slug}` },
@@ -127,7 +127,7 @@ export default async function ThemePage({ params }: { params: Promise<Params> })
 
       <div style={{ padding: "28px 24px" }}>
         <VideoGrid videos={videos} emptyMessage={`No films with theme "${label}" yet.`} />
-        <CollectionFaq heading={`Films about ${label.toLowerCase()} — FAQ`} faqs={copy.faqs} />
+        <CollectionFaq heading={`Films about ${label.toLowerCase()}: FAQ`} faqs={copy.faqs} />
       </div>
     </>
   );

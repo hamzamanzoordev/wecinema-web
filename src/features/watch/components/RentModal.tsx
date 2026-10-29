@@ -201,7 +201,7 @@ function TestRentForm({
           border: "1px solid rgba(245,158,11,0.35)",
         }}
       >
-        TEST MODE — no real payment will be taken.
+        TEST MODE: no real payment will be taken.
       </p>
       {error && (
         <p role="alert" style={{ margin: "0 0 12px", fontSize: 13, color: "#ef4444" }}>

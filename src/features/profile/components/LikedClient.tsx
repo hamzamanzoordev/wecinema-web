@@ -173,7 +173,7 @@ export function LikedClient({ userId }: LikedClientProps) {
       )}
 
       {authUser && isOwner && !loading && !error && videos.length === 0 && (
-        <EmptyState icon="❤️" label="No liked videos yet — like some videos to see them here" />
+        <EmptyState icon="❤️" label="No liked videos yet. Like some videos to see them here" />
       )}
 
       {authUser && isOwner && !loading && !error && videos.length > 0 && (

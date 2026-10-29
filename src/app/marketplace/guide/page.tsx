@@ -40,7 +40,7 @@ const STEPS = [
       <>
         Sign up and choose the seller role, then connect a Stripe account so you can get paid. WeCinema
         uses Stripe escrow, which means a buyer&apos;s funds are held securely and only released to you once
-        the sale is confirmed — protecting both sides of every deal. <Link href="/signup">Create your
+        the sale is confirmed, protecting both sides of every deal. <Link href="/signup">Create your
         account</Link> to begin.
       </>
     ),
@@ -50,8 +50,8 @@ const STEPS = [
     body: (
       <>
         Head to <Link href="/marketplace/listings/new">New Listing</Link> and add your film or script.
-        Choose the listing type that matches your goal — <strong>for sale</strong>,{" "}
-        <strong>licensing</strong>, <strong>adaptation rights</strong>, or <strong>commission</strong> —
+        Choose the listing type that matches your goal (<strong>for sale</strong>,{" "}
+        <strong>licensing</strong>, <strong>adaptation rights</strong>, or <strong>commission</strong>),
         then upload a poster or thumbnail, write a clear description, and set your price. A specific title
         (genre, theme, and format) helps your listing surface in both marketplace and Google search.
       </>
@@ -72,7 +72,7 @@ const STEPS = [
     body: (
       <>
         Buyers can purchase at your listed price or send a custom offer. Use built-in, order-linked chat
-        to answer questions, clarify what&apos;s included, agree on terms, and close the deal — all inside
+        to answer questions, clarify what&apos;s included, agree on terms, and close the deal, all inside
         WeCinema, with a record attached to the order.
       </>
     ),
@@ -90,10 +90,10 @@ const STEPS = [
 ];
 
 const TIPS = [
-  "Lead with a strong poster or thumbnail — it's the first thing buyers see in Browse and in search results.",
+  "Lead with a strong poster or thumbnail. It's the first thing buyers see in Browse and in search results.",
   "Write a specific, honest description: genre, runtime, format, what rights are included, and what makes the work stand out.",
   "Pick the right listing type. A licensing or adaptation-rights listing reaches a very different buyer than an outright sale.",
-  "Respond quickly to offers and messages — momentum closes deals, and responsiveness builds seller reputation.",
+  "Respond quickly to offers and messages. Momentum closes deals, and responsiveness builds seller reputation.",
   "Consider HypeMode for priority placement, a trending badge, and reduced fees when you want a listing seen fast.",
 ];
 
@@ -108,11 +108,11 @@ const FAQ = [
   },
   {
     q: "How should I price my film or script?",
-    a: "There's no single right price. Finished short films typically sell or license for modest flat fees, while feature rights and adaptation deals command more. Many creators offer tiered options — a lower price for a limited or non-exclusive license and a higher price for exclusive or outright sale. Browse comparable listings, be clear about exactly what the buyer receives, and start with a fair price you can adjust.",
+    a: "There's no single right price. Finished short films typically sell or license for modest flat fees, while feature rights and adaptation deals command more. Many creators offer tiered options: a lower price for a limited or non-exclusive license and a higher price for exclusive or outright sale. Browse comparable listings, be clear about exactly what the buyer receives, and start with a fair price you can adjust.",
   },
   {
     q: "Can I sell film or adaptation rights without selling the film itself?",
-    a: "Yes. Licensing lets you grant commercial, broadcast, or streaming usage while keeping ownership, and an adaptation-rights listing sells the right to remake or adapt your story. You choose the model that fits — outright sale, license, adaptation rights, or a custom commission.",
+    a: "Yes. Licensing lets you grant commercial, broadcast, or streaming usage while keeping ownership, and an adaptation-rights listing sells the right to remake or adapt your story. You choose the model that fits: outright sale, license, adaptation rights, or a custom commission.",
   },
   {
     q: "How do I get paid, and is it safe?",
@@ -150,7 +150,7 @@ const Guide: React.FC = () => {
           "@type": "Article",
           headline: "How to Sell Your Film or Script Online",
           description:
-            "A step-by-step guide to selling independent films, licensing rights, adaptation rights, and scripts online through the WeCinema marketplace — pricing, escrow payments, and getting discovered.",
+            "A step-by-step guide to selling independent films, licensing rights, adaptation rights, and scripts online through the WeCinema marketplace: pricing, escrow payments, and getting discovered.",
           image: OG.marketplace,
           datePublished: PUBLISHED,
           dateModified: PUBLISHED,
@@ -199,7 +199,7 @@ const Guide: React.FC = () => {
           }}
         >
           To sell your film or script online, create a free WeCinema seller account, connect Stripe, and
-          list your work — choosing an outright sale, a license, adaptation rights, or a commission. Set
+          list your work, choosing an outright sale, a license, adaptation rights, or a commission. Set
           your price, get approved, and Stripe escrow holds the buyer&apos;s payment until you deliver, then
           releases your earnings.
         </p>
@@ -208,7 +208,7 @@ const Guide: React.FC = () => {
           short film, hold the rights to a feature, or have a screenplay ready for the right producer, you
           no longer need a festival slot or an agent to reach buyers. This guide explains exactly how to
           sell your film or script online through the <Link href="/marketplace">WeCinema marketplace</Link>
-          {" "}— what you can list, how to price your work, how escrow protects both sides, and how to get
+          : what you can list, how to price your work, how escrow protects both sides, and how to get
           discovered by the studios, production companies, and creators actively looking for content like
           yours.
         </p>
@@ -260,7 +260,7 @@ const Guide: React.FC = () => {
           <p style={para}>
             There&apos;s no single &quot;right&quot; price, but a few principles help you set one with confidence.
             Finished short films typically sell or license for modest flat fees, while feature rights and
-            adaptation deals command more. Many creators list <strong>tiered options</strong> — a lower price
+            adaptation deals command more. Many creators list <strong>tiered options</strong>: a lower price
             for a limited or non-exclusive license, and a higher price for exclusive or outright sale.
           </p>
           <p style={para}>
@@ -276,7 +276,7 @@ const Guide: React.FC = () => {
           <h2 style={h2Style}>How you get paid: escrow, explained</h2>
           <p style={para}>
             Every transaction is protected by <strong>Stripe escrow</strong>. When a buyer purchases or
-            accepts an offer, their payment is authorized and held — not sent directly to you, and not left
+            accepts an offer, their payment is authorized and held, not sent directly to you, and not left
             with the buyer. Funds are only released to your connected Stripe account once the order is marked
             delivered and confirmed. This protects sellers from non-payment and buyers from non-delivery, so
             both sides can transact with strangers safely. Your earnings, minus the platform fee, land in

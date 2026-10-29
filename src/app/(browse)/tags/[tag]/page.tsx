@@ -34,11 +34,11 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
   const pretty = displayTag(label);
 
   const description = feed.total
-    ? `Watch ${feed.total} film${feed.total === 1 ? "" : "s"} tagged ${pretty} on WeCinema — independent shorts and features from creators worldwide.`
+    ? `Watch ${feed.total} film${feed.total === 1 ? "" : "s"} tagged ${pretty} on WeCinema: independent shorts and features from creators worldwide.`
     : `Films tagged ${pretty} on WeCinema. Browse independent shorts and features by hashtag.`;
 
   return {
-    title: `${pretty} — Films Tagged ${label} | WeCinema`,
+    title: `${pretty}: Films Tagged ${label} | WeCinema`,
     description,
     keywords: [label, `${label} films`, `${label} videos`, "hashtag", "independent film"],
     alternates: { canonical: `/tags/${slug}` },
@@ -121,7 +121,7 @@ export default async function TagPage({ params }: { params: Promise<Params> }) {
         <p style={{ margin: "6px 0 0", fontSize: 14, color: "var(--color-text-tertiary)" }}>
           {feed.total > 0
             ? `${feed.total.toLocaleString()} video${feed.total === 1 ? "" : "s"}`
-            : "No videos yet — be the first to use this hashtag."}
+            : "No videos yet. Be the first to use this hashtag."}
         </p>
       </div>
 

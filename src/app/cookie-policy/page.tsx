@@ -83,8 +83,8 @@ const TOC = [
 ];
 
 const THIRD_PARTIES = [
-  { name: "Google Analytics", role: "Usage analytics — only with your consent.", href: "https://policies.google.com/privacy", label: "policies.google.com/privacy" },
-  { name: "Meta Platforms", role: "Ad measurement (Meta Pixel) — only with your consent, public pages only.", href: "https://www.facebook.com/privacy/policy", label: "facebook.com/privacy/policy" },
+  { name: "Google Analytics", role: "Usage analytics, only with your consent.", href: "https://policies.google.com/privacy", label: "policies.google.com/privacy" },
+  { name: "Meta Platforms", role: "Ad measurement (Meta Pixel), only with your consent, public pages only.", href: "https://www.facebook.com/privacy/policy", label: "facebook.com/privacy/policy" },
   { name: "Stripe", role: "Card payments and fraud prevention, when a checkout form opens.", href: "https://stripe.com/privacy", label: "stripe.com/privacy" },
   { name: "PayPal", role: "Subscription payments, when PayPal checkout opens.", href: "https://www.paypal.com/us/legalhub/privacy-full", label: "paypal.com privacy statement" },
   { name: "Google Firebase", role: "Sign in with Google and marketplace chat.", href: "https://firebase.google.com/support/privacy", label: "firebase.google.com/support/privacy" },

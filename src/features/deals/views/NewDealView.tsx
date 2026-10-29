@@ -110,7 +110,7 @@ export default function NewDealView({ listingId }: { listingId?: string }) {
     } catch (err) {
       const existing = err instanceof AppError ? err.body?.existingDealId : undefined;
       if (err instanceof AppError && err.code === "DEAL_EXISTS" && typeof existing === "string") {
-        toast("You already have an open deal on this listing — opening it now.");
+        toast("You already have an open deal on this listing. Opening it now.");
         router.push(`/marketplace/deal/${existing}`);
         return;
       }
