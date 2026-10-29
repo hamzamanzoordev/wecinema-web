@@ -10,11 +10,9 @@ import { usePathname, useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 import { IoMdHome } from "react-icons/io";
-import { IoSunnyOutline } from "react-icons/io5";
 import { TbVideoPlus } from "react-icons/tb";
 import {
-  FaMoon, FaCrown, FaInfoCircle, FaShoppingCart,
-  FaSignOutAlt, FaUserTie, FaUser,
+  FaCrown, FaInfoCircle, FaShoppingCart, FaUserTie,
 } from "react-icons/fa";
 import {
   MdChatBubbleOutline, MdOutlineDescription, MdOutlinePrivacyTip,
@@ -29,9 +27,6 @@ import { X, Clapperboard } from "lucide-react";
 
 import { SIDEBAR_COLLAPSED_W, SIDEBAR_EXPANDED_W } from "@/lib/constants";
 import { useAuth } from "@/features/auth/context/AuthContext";
-import { useTheme } from "@/components/layout/ThemeProvider";
-import { changeUserType } from "@/features/profile/services/profileService";
-import type { UserType } from "@/types";
 
 interface SidebarProps {
   expand: boolean;
@@ -222,254 +217,10 @@ const MarketplaceSection = ({
   );
 };
 
-// ─── Profile Popup ────────────────────────────────────────────
-const POPUP_W = 256;
-
-interface ProfilePopupProps {
-  isOpen: boolean;
-  onClose: () => void;
-  anchorRef: React.RefObject<HTMLElement | null>;
-  userMode: "buyer" | "seller" | "";
-  onModeChange: (m: "buyer" | "seller") => Promise<void>;
-}
-
-const ProfilePopup = ({ isOpen, onClose, anchorRef, userMode, onModeChange }: ProfilePopupProps) => {
-  const { authUser, logout } = useAuth();
-  const { isDark, setMode } = useTheme();
-  const router = useRouter();
-  const popRef = useRef<HTMLDivElement>(null);
-  const [pos, setPos] = useState({ top: 0, left: 0 });
-  const [switching, setSwitching] = useState(false);
-
-  const refreshPos = useCallback(() => {
-    if (!anchorRef.current) return;
-    const r = anchorRef.current.getBoundingClientRect();
-    setPos({ top: r.top - 8, left: r.left });
-  }, [anchorRef]);
-
-  useEffect(() => { if (isOpen) refreshPos(); }, [isOpen, refreshPos]);
-
-  useEffect(() => {
-    if (!isOpen) return;
-    window.addEventListener("resize", refreshPos);
-    window.addEventListener("scroll", refreshPos, true);
-    return () => {
-      window.removeEventListener("resize", refreshPos);
-      window.removeEventListener("scroll", refreshPos, true);
-    };
-  }, [isOpen, refreshPos]);
-
-  useEffect(() => {
-    if (!isOpen) return;
-    const fn = (e: Event) => {
-      const t = e.target as Node;
-      if (
-        popRef.current && !popRef.current.contains(t) &&
-        anchorRef.current && !anchorRef.current.contains(t)
-      ) onClose();
-    };
-    document.addEventListener("mousedown", fn);
-    return () => document.removeEventListener("mousedown", fn);
-  }, [isOpen, onClose, anchorRef]);
-
-  useEffect(() => {
-    if (!isOpen) return;
-    const fn = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
-    document.addEventListener("keydown", fn);
-    return () => document.removeEventListener("keydown", fn);
-  }, [isOpen, onClose]);
-
-  const switchMode = async (m: "buyer" | "seller") => {
-    if (m === userMode || switching) return;
-    setSwitching(true);
-    await onModeChange(m);
-    setSwitching(false);
-  };
-
-  const handleSignOut = async () => {
-    onClose();
-    await logout();
-    router.push("/");
-  };
-
-  if (!isOpen || !authUser) return null;
-
-  const hasPaid = authUser.hasPaid ?? false;
-  const hasRole = userMode === "buyer" || userMode === "seller";
-
-  const popup = (
-    <>
-      {isOpen && (
-        <div
-          ref={popRef}
-          className="sb-popup-in"
-          style={{
-            position: "fixed", zIndex: 9998,
-            width: POPUP_W,
-            bottom: `calc(100vh - ${pos.top}px)`,
-            left: pos.left,
-            backgroundColor: "var(--color-bg-elevated)",
-            border: "1px solid var(--color-border-secondary)",
-            borderRadius: 18,
-            boxShadow: "0 12px 48px rgba(0,0,0,0.14), 0 2px 8px rgba(0,0,0,0.07)",
-            overflow: "hidden",
-          }}
-        >
-          <div style={{ height: 3, background: "linear-gradient(90deg,#FFBB00,#E6A800)" }} />
-
-          {/* User info */}
-          <div style={{ padding: "14px 14px 12px", display: "flex", alignItems: "center", gap: 10, borderBottom: "1px solid var(--color-divider)" }}>
-            <div style={{ position: "relative", flexShrink: 0 }}>
-              <div style={{
-                width: 40, height: 40, borderRadius: 9999,
-                background: "linear-gradient(135deg,#FFBB00,#E6A800)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                color: "#fff", fontSize: "0.9rem", fontWeight: 700, overflow: "hidden",
-                boxShadow: "0 2px 8px rgba(255,107,0,0.3)",
-              }}>
-                {authUser.avatar
-                  // eslint-disable-next-line @next/next/no-img-element
-                  ? <img src={authUser.avatar} style={{ width: "100%", height: "100%", objectFit: "cover" }} alt="" />
-                  : (authUser.username?.[0] ?? "U").toUpperCase()}
-              </div>
-              {hasPaid && (
-                <span style={{
-                  position: "absolute", top: -1, right: -1,
-                  width: 16, height: 16, borderRadius: 9999,
-                  background: "linear-gradient(135deg,#FFBB00,#E6A800)",
-                  border: "2px solid var(--color-bg-elevated)",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                }}>
-                  <FaCrown size={7} color="#fff" />
-                </span>
-              )}
-            </div>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <p style={{ margin: 0, fontSize: 13, fontWeight: 700, color: "var(--color-text-primary)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                {authUser.username}
-              </p>
-              <p style={{ margin: 0, fontSize: 11, color: hasPaid ? "#FFBB00" : "var(--color-text-tertiary)" }}>
-                {hasPaid ? "✦ Premium Member" : "Free Plan"}
-              </p>
-            </div>
-          </div>
-
-          <div style={{ padding: 6 }}>
-            {/* View Profile */}
-            <Link
-              href={`/user/${authUser._id}`}
-              onClick={onClose}
-              style={{
-                display: "flex", alignItems: "center", gap: 10, padding: "9px 10px",
-                borderRadius: 10, textDecoration: "none", color: "var(--color-text-secondary)",
-                fontSize: 13, fontWeight: 500, transition: "background-color 0.12s",
-              }}
-              onMouseEnter={e => { e.currentTarget.style.backgroundColor = "var(--color-bg-tertiary)"; }}
-              onMouseLeave={e => { e.currentTarget.style.backgroundColor = "transparent"; }}
-            >
-              <FaUser size={12} style={{ color: "var(--color-text-tertiary)", flexShrink: 0 }} />
-              View Profile
-            </Link>
-
-            {/* Marketplace mode switcher — also for paid users with no role yet
-                (e.g. userType "normalUser"), otherwise they can never unlock Marketplace. */}
-            {(hasRole || hasPaid) && (
-              <div style={{ padding: "6px 4px" }}>
-                <p style={{ margin: "0 0 6px 6px", fontSize: 9.5, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--color-text-tertiary)" }}>
-                  Marketplace Mode
-                </p>
-                <div style={{ display: "flex", borderRadius: 12, padding: 3, gap: 3, background: "var(--color-bg-tertiary)" }}>
-                  {(["buyer", "seller"] as const).map(m => {
-                    const isActive = userMode === m;
-                    const c = m === "seller" ? "#a78bfa" : "#FFBB00";
-                    return (
-                      <button
-                        key={m}
-                        type="button"
-                        disabled={switching}
-                        onClick={() => switchMode(m)}
-                        style={{
-                          flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 5,
-                          padding: "7px 0", borderRadius: 9, border: "none",
-                          cursor: switching ? "not-allowed" : "pointer",
-                          fontSize: 11, fontWeight: 700, fontFamily: "inherit", transition: "all 0.15s",
-                          ...(isActive
-                            ? { background: "var(--color-bg-elevated)", color: c, boxShadow: "0 1px 4px rgba(0,0,0,0.09)" }
-                            : { background: "transparent", color: "var(--color-text-tertiary)", opacity: switching ? 0.5 : 1 }),
-                        }}
-                      >
-                        {m === "buyer" ? <><FaShoppingCart size={10} /> Buyer</> : <><FaUserTie size={10} /> Seller</>}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-
-            {/* Theme switcher */}
-            <div style={{ padding: "6px 4px" }}>
-              <p style={{ margin: "0 0 6px 6px", fontSize: 9.5, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--color-text-tertiary)" }}>
-                Appearance
-              </p>
-              <div style={{ display: "flex", borderRadius: 12, padding: 3, gap: 3, background: "var(--color-bg-tertiary)" }}>
-                {([
-                  { mode: "light" as const, Icon: IoSunnyOutline, label: "Light" },
-                  { mode: "dark"  as const, Icon: FaMoon,         label: "Dark"  },
-                ]).map(({ mode, Icon, label }) => {
-                  const isActive = (mode === "light" && !isDark) || (mode === "dark" && isDark);
-                  return (
-                    <button
-                      key={mode}
-                      type="button"
-                      onClick={() => setMode(mode)}
-                      style={{
-                        flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 5,
-                        padding: "7px 0", borderRadius: 9, border: "none", cursor: "pointer",
-                        fontSize: 11, fontWeight: 700, fontFamily: "inherit", transition: "all 0.15s",
-                        ...(isActive
-                          ? { background: "var(--color-bg-elevated)", color: "#FFBB00", boxShadow: "0 1px 4px rgba(0,0,0,0.09)" }
-                          : { background: "transparent", color: "var(--color-text-tertiary)" }),
-                      }}
-                    >
-                      <Icon size={12} /> {label}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-
-          <div style={{ height: 1, background: "var(--color-divider)", margin: "0 6px" }} />
-
-          <div style={{ padding: 6 }}>
-            <button
-              type="button"
-              onClick={handleSignOut}
-              style={{
-                display: "flex", alignItems: "center", gap: 10, padding: "9px 10px", borderRadius: 10,
-                width: "100%", border: "none", background: "transparent", cursor: "pointer",
-                color: "var(--color-danger,#EF4444)", fontSize: 13, fontWeight: 500,
-                fontFamily: "inherit", textAlign: "left", transition: "background-color 0.12s",
-              }}
-              onMouseEnter={e => { e.currentTarget.style.backgroundColor = "rgba(239,68,68,0.06)"; }}
-              onMouseLeave={e => { e.currentTarget.style.backgroundColor = "transparent"; }}
-            >
-              <FaSignOutAlt size={13} style={{ flexShrink: 0 }} />
-              Sign Out
-            </button>
-          </div>
-        </div>
-      )}
-    </>
-  );
-
-  return createPortal(popup, document.body);
-};
-
 // ─── Main Sidebar ─────────────────────────────────────────────
 export default function Sidebar({ expand, onClose }: SidebarProps) {
   const pathname = usePathname();
-  const { authUser, isAuthenticated, logout, refreshUser } = useAuth();
+  const { authUser, isAuthenticated } = useAuth();
   const router = useRouter();
 
   const [userMode, setUserMode] = useState<"buyer" | "seller" | "">(() => {
@@ -479,9 +230,6 @@ export default function Sidebar({ expand, onClose }: SidebarProps) {
       : "";
   });
 
-  const [popupOpen, setPopupOpen] = useState(false);
-  const profileRef = useRef<HTMLButtonElement>(null);
-
   // Sync userMode when authUser is refreshed (login, token restore, etc.)
   useEffect(() => {
     if (!authUser) { setUserMode(""); return; }
@@ -489,19 +237,6 @@ export default function Sidebar({ expand, onClose }: SidebarProps) {
       setUserMode(authUser.userType);
     }
   }, [authUser]);
-
-  const handleModeChange = useCallback(async (newMode: "buyer" | "seller") => {
-    if (!authUser?._id) return;
-    const prev = userMode;
-    setUserMode(newMode);   // optimistic update
-    try {
-      await changeUserType(authUser._id, newMode as UserType);
-      // Persist the change into the auth cache so re-mounts read the correct type
-      await refreshUser();
-    } catch {
-      setUserMode(prev);
-    }
-  }, [authUser?._id, userMode, refreshUser]);
 
   const isActive = (p: string) => pathname === p;
   const hasPaid = authUser?.hasPaid ?? false;
@@ -611,102 +346,8 @@ export default function Sidebar({ expand, onClose }: SidebarProps) {
           </div>
         </div>
 
-        {/* Profile button at bottom */}
-        {isAuthenticated && authUser && (
-          <div style={{ borderTop: "1px solid var(--color-divider)", padding: "8px 6px" }}>
-            {!expand ? (
-              <Tip label={authUser.username}>
-                <button
-                  ref={profileRef}
-                  type="button"
-                  onClick={() => setPopupOpen(p => !p)}
-                  aria-label={`Open profile menu for ${authUser.username ?? "your account"}`}
-                  aria-expanded={popupOpen}
-                  style={{
-                    width: "100%", display: "flex", alignItems: "center", justifyContent: "center",
-                    padding: "8px 0", borderRadius: 12, border: "none", cursor: "pointer",
-                    background: popupOpen ? "rgba(255,187,0,0.08)" : "transparent",
-                    transition: "background 0.15s",
-                  }}
-                >
-                  <div style={{
-                    width: 32, height: 32, borderRadius: 9999, overflow: "hidden",
-                    background: "linear-gradient(135deg,#FFBB00,#E6A800)",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    fontSize: 13, fontWeight: 700, color: "#fff", flexShrink: 0,
-                  }}>
-                    {authUser.avatar
-                      // eslint-disable-next-line @next/next/no-img-element
-                      ? <img src={authUser.avatar} style={{ width: "100%", height: "100%", objectFit: "cover" }} alt="" />
-                      : (authUser.username?.[0] ?? "U").toUpperCase()}
-                  </div>
-                </button>
-              </Tip>
-            ) : (
-              <button
-                ref={profileRef}
-                type="button"
-                onClick={() => setPopupOpen(p => !p)}
-                style={{
-                  width: "100%", display: "flex", alignItems: "center", gap: 10,
-                  padding: "8px 10px", borderRadius: 12, border: "none", cursor: "pointer",
-                  background: popupOpen ? "rgba(255,187,0,0.08)" : "transparent",
-                  transition: "background 0.15s", textAlign: "left",
-                }}
-                onMouseEnter={e => { if (!popupOpen) e.currentTarget.style.background = "rgba(0,0,0,0.04)"; }}
-                onMouseLeave={e => { if (!popupOpen) e.currentTarget.style.background = "transparent"; }}
-              >
-                <div style={{
-                  width: 32, height: 32, borderRadius: 9999, overflow: "hidden", flexShrink: 0,
-                  background: "linear-gradient(135deg,#FFBB00,#E6A800)",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 13, fontWeight: 700, color: "#fff",
-                }}>
-                  {authUser.avatar
-                    // eslint-disable-next-line @next/next/no-img-element
-                    ? <img src={authUser.avatar} style={{ width: "100%", height: "100%", objectFit: "cover" }} alt="" />
-                    : (authUser.username?.[0] ?? "U").toUpperCase()}
-                </div>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <p style={{ margin: 0, fontSize: 13, fontWeight: 600, color: "var(--color-text-primary)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                    {authUser.username}
-                  </p>
-                  {userMode && (
-                    <p style={{ margin: 0, fontSize: 10, color: userMode === "seller" ? "#a78bfa" : "var(--color-accent-primary)", fontWeight: 600 }}>
-                      {userMode === "seller" ? "Seller" : "Buyer"}
-                    </p>
-                  )}
-                </div>
-              </button>
-            )}
-          </div>
-        )}
-
-        {/* Sign-in prompt for unauthenticated users */}
-        {!isAuthenticated && expand && (
-          <div style={{ borderTop: "1px solid var(--color-divider)", padding: "10px 8px" }}>
-            <Link
-              href="/login"
-              style={{
-                display: "flex", alignItems: "center", justifyContent: "center",
-                padding: "9px 0", borderRadius: 12, textDecoration: "none",
-                background: "var(--color-accent-primary)", color: "#fff",
-                fontSize: 12, fontWeight: 700,
-              }}
-            >
-              Sign In
-            </Link>
-          </div>
-        )}
       </aside>
 
-      <ProfilePopup
-        isOpen={popupOpen}
-        onClose={() => setPopupOpen(false)}
-        anchorRef={profileRef}
-        userMode={userMode}
-        onModeChange={handleModeChange}
-      />
     </>
   );
 }
