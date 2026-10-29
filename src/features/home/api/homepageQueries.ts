@@ -10,6 +10,10 @@ const HOMEPAGE_ROWS = 2;
 const HOMEPAGE_COLUMNS = 3;
 const HOMEPAGE_ROW_LIMIT = HOMEPAGE_ROWS * HOMEPAGE_COLUMNS;
 
+/** Latest Videos gets more room than Trending so recent uploads stay visible. */
+const LATEST_ROWS = 4;
+const LATEST_LIMIT = LATEST_ROWS * HOMEPAGE_COLUMNS;
+
 /**
  * Homepage data layer.
  *
@@ -124,7 +128,7 @@ export async function getHomepageData(): Promise<HomepageData> {
   const latest = all
     .filter((v) => !v.isShort)
     .sort(newestFirst)
-    .slice(0, HOMEPAGE_ROW_LIMIT);
+    .slice(0, LATEST_LIMIT);
 
   // ── Trending: recommended OR red_carpet, sorted, deduped ──
   const trending = all

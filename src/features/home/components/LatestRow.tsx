@@ -8,6 +8,7 @@ export function LatestRow({ videos }: { videos: Video[] }) {
   return (
     <MediaRow
       title="Latest Videos"
+      viewAllHref="/explore"
       icon={<Clock size={18} color="var(--color-accent-primary)" aria-hidden />}
     >
       {videos.map((v) => (

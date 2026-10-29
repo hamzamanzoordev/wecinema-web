@@ -41,19 +41,19 @@ describe("getHomepageData latest videos", () => {
     expect(latest.map((v) => v._id)).toEqual(["today", "yesterday", "last-week", "old-red-carpet"]);
   });
 
-  it("leaves out shorts and unpublished videos, and caps the row at six", async () => {
+  it("leaves out shorts and unpublished videos, and caps the row at twelve", async () => {
     apiFetch.mockResolvedValue({
       videos: [
         video("short", 0, { isShort: true }),
         video("unpublished", 0, { published: false }),
-        ...Array.from({ length: 8 }, (_, i) => video(`film-${i + 1}`, i + 1)),
+        ...Array.from({ length: 14 }, (_, i) => video(`film-${i + 1}`, i + 1)),
       ],
     });
 
     const { latest } = await getHomepageData();
 
-    expect(latest).toHaveLength(6);
-    expect(latest.map((v) => v._id)).toEqual(["film-1", "film-2", "film-3", "film-4", "film-5", "film-6"]);
+    expect(latest).toHaveLength(12);
+    expect(latest.map((v) => v._id)).toEqual(Array.from({ length: 12 }, (_, i) => `film-${i + 1}`));
   });
 
   it("is empty when the video list can't be fetched", async () => {
