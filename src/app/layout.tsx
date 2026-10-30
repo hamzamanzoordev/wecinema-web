@@ -44,7 +44,10 @@ const DESCRIPTION =
 // and ThemeProvider only switches to the saved/system theme after hydration,
 // producing a visible light→dark flash that reads as the page "loading twice".
 // Keep in sync with ThemeProvider's STORAGE_KEY ("wc_theme").
-const THEME_INIT_SCRIPT = `(function(){try{var m=localStorage.getItem('wc_theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');var e=document.documentElement;e.setAttribute('data-theme',m);e.style.colorScheme=m;}catch(e){}})();`;
+// Also flags the Halloween season (Oct 1 – Nov 1, visitor's local date) via
+// data-season. All seasonal styling/decor is CSS-gated on that attribute, so it
+// turns itself off after Halloween with no deploy and no hydration mismatch.
+const THEME_INIT_SCRIPT = `(function(){var e=document.documentElement;try{var d=new Date(),mo=d.getMonth(),da=d.getDate();if(mo===9||(mo===10&&da===1))e.setAttribute('data-season','halloween');}catch(x){}try{var m=localStorage.getItem('wc_theme')||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');e.setAttribute('data-theme',m);e.style.colorScheme=m;}catch(x){}})();`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

@@ -947,3 +947,99 @@ summary::-webkit-details-marker { display: none; }
   .upload-wizard-panel,
   .upload-wizard-viewport { transition: none; }
 }
+
+/* ===========================================================================
+   Halloween season — active when <html data-season="halloween"> (set pre-paint
+   in app/layout.tsx for Oct 1 – Nov 1). Remove this block + HalloweenDecor to
+   retire the theme; otherwise it switches itself off by date.
+   =========================================================================== */
+.hw-only { display: none; }
+html[data-season="halloween"] .hw-only { display: block; }
+
+/* Pumpkin-orange accent replaces the amber in both light and dark modes. */
+html[data-season="halloween"] {
+  --color-accent-primary: #FF7A00;
+  --color-accent-secondary: #FF7A00;
+  --color-accent-tertiary: #FF9533;
+  --color-accent-hover: #E86A00;
+  --color-accent-active: #CC5C00;
+  --color-border-focus: #FF7A00;
+  --color-text-link: #C25400;
+  --hw-purple: #6B2FA0;
+}
+html[data-season="halloween"][data-theme="dark"] {
+  --color-accent-tertiary: #FFA04D;
+  --color-accent-hover: #FF9533;
+  --color-text-link: #FF9533;
+  --hw-purple: #A970E0;
+}
+
+/* Logo: witch hat perched on the mark, pumpkin after the wordmark */
+.hw-logo-mark { position: relative; display: inline-flex; }
+.hw-hat {
+  position: absolute; top: -11px; left: -6px;
+  transform: rotate(-20deg); pointer-events: none;
+  filter: drop-shadow(0 1px 1px rgba(0,0,0,0.25));
+}
+[data-theme="dark"] .hw-hat path,
+[data-theme="dark"] .hw-hat ellipse { fill: #4A2470; }
+html[data-season="halloween"] .hw-pumpkin { display: none; }
+@media (min-width: 901px) {
+  html[data-season="halloween"] .hw-pumpkin { display: block; animation: hwWobble 3.5s ease-in-out infinite; transform-origin: 50% 90%; }
+}
+
+/* Nav underline + selection get a purple/orange spooky gradient */
+html[data-season="halloween"] .hdr-nav-link::after,
+html[data-season="halloween"] .hdr-dd-trigger::after {
+  background: linear-gradient(90deg, #FF7A00, var(--hw-purple));
+}
+html[data-season="halloween"] ::selection { background-color: var(--hw-purple); color: #FFFFFF; }
+
+/* Fixed decor layer — never intercepts clicks */
+.hw-decor { position: fixed; inset: 0; z-index: 90; pointer-events: none; overflow: hidden; }
+.hw-web {
+  position: absolute; top: 60px; right: 0;
+  color: rgba(0,0,0,0.18);
+}
+[data-theme="dark"] .hw-web { color: rgba(255,255,255,0.22); }
+.hw-spider {
+  position: absolute; top: 60px; right: 46px;
+  display: flex; flex-direction: column; align-items: center;
+  animation: hwDangle 6s ease-in-out infinite; transform-origin: top center;
+}
+.hw-thread { width: 1px; height: 64px; background: currentColor; color: rgba(0,0,0,0.3); }
+[data-theme="dark"] .hw-thread { color: rgba(255,255,255,0.35); }
+[data-theme="dark"] .hw-spider svg path,
+[data-theme="dark"] .hw-spider svg ellipse,
+[data-theme="dark"] .hw-spider svg circle:first-of-type { stroke: #d6d6d6; }
+
+.hw-bat { position: absolute; left: -60px; color: #2B1740; opacity: 0; }
+[data-theme="dark"] .hw-bat { color: #B98AE6; }
+.hw-bat-0 { top: 18%; animation: hwFly 22s linear 2s infinite, hwFlap 0.35s ease-in-out infinite alternate; }
+.hw-bat-1 { top: 34%; width: 24px; animation: hwFly 28s linear 9s infinite, hwFlap 0.3s ease-in-out infinite alternate; }
+.hw-bat-2 { top: 12%; width: 20px; animation: hwFly 34s linear 17s infinite, hwFlap 0.4s ease-in-out infinite alternate; }
+
+/* Small screens: keep only the bats so content stays uncluttered */
+@media (max-width: 768px) {
+  .hw-web, .hw-spider { display: none; }
+}
+
+/* A bat crosses during the first ~35% of its cycle, then stays off-screen,
+   so each one only passes occasionally. */
+@keyframes hwFly {
+  0%   { transform: translate(0, 0); opacity: 0; }
+  2%   { opacity: 0.85; }
+  9%   { transform: translate(28vw, -4vh); }
+  18%  { transform: translate(56vw, 3vh); }
+  27%  { transform: translate(84vw, -3vh); }
+  33%  { opacity: 0.85; }
+  35%, 100% { transform: translate(calc(100vw + 120px), 0); opacity: 0; }
+}
+@keyframes hwFlap   { from { scale: 1 1; } to { scale: 1 0.55; } }
+@keyframes hwDangle { 0%,100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(14px) rotate(4deg); } }
+@keyframes hwWobble { 0%,100% { transform: rotate(0); } 50% { transform: rotate(-10deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .hw-bat { display: none; }
+  .hw-spider, html[data-season="halloween"] .hw-pumpkin { animation: none; }
+}

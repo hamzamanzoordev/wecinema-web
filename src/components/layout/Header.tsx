@@ -16,6 +16,7 @@ import { AvatarProgress } from "@/components/ui/AvatarProgress";
 import { useUploads } from "@/features/upload/context/UploadManagerProvider";
 import { UploadsMenuSection } from "@/features/upload/components/UploadsMenu";
 import SearchBar from "@/features/search/SearchBar";
+import { WitchHat, Pumpkin } from "@/components/layout/HalloweenDecor";
 
 interface HeaderProps {
   toggleSidebar?: () => void;
@@ -205,10 +206,14 @@ const Header: FC<HeaderProps> = ({ toggleSidebar }) => {
           </button>
 
           <Link href="/" aria-label="Home" className="hdr-logo" style={{ alignItems: "center", gap: 8, cursor: "pointer", userSelect: "none", marginLeft: 2, flexShrink: 0, textDecoration: "none" }}>
-            <Image src="/wecinema.webp" alt="WeCinema" width={32} height={28} priority style={{ objectFit: "contain" }} />
+            <span className="hw-logo-mark">
+              <Image src="/wecinema.webp" alt="WeCinema" width={32} height={28} priority style={{ objectFit: "contain" }} />
+              <WitchHat />
+            </span>
             <span className="hdr-logo-text" style={{ fontSize: "1.0625rem", fontWeight: 800, fontFamily: "var(--font-heading)", color: "var(--color-text-primary)", letterSpacing: "-0.02em" }}>
               WeCinema
             </span>
+            <Pumpkin size={16} />
           </Link>
 
           <nav className="hdr-nav-links" style={{ alignItems: "center", gap: 22, marginLeft: 18, flexShrink: 0 }}>

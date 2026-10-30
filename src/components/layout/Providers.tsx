@@ -5,6 +5,7 @@ import { Toaster } from "react-hot-toast";
 import { ThemeProvider } from "@/components/layout/ThemeProvider";
 import { AuthProvider } from "@/features/auth/context/AuthContext";
 import { TestModeBanner } from "@/components/layout/TestModeBanner";
+import { HalloweenDecor } from "@/components/layout/HalloweenDecor";
 import { UploadManagerProvider } from "@/features/upload/context/UploadManagerProvider";
 import { Analytics } from "@/components/analytics/Analytics";
 import { MetaPixel } from "@/components/analytics/MetaPixel";
@@ -20,6 +21,7 @@ export function Providers({ children }: { children: ReactNode }) {
           <UploadManagerProvider>
           {children}
           <TestModeBanner />
+          <HalloweenDecor />
           <Toaster
             position="top-right"
             toastOptions={{
